@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>개인정보처리방침 — 내 월급 명세서</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700;900&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1B2A4A; --paper:#F1ECE0; --gold:#C9A227; --gold-2:#E4C55C;
+    --text:#20242E; --muted:#6B7488;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background: var(--ink); font-family:'Noto Sans KR', sans-serif; color: var(--text);
+    display:flex; justify-content:center; padding: 40px 16px 90px;
+  }
+  .wrap{ width:100%; max-width: 640px; }
+  .nav{ display:flex; justify-content:center; gap: 18px; margin-bottom: 26px; }
+  .nav a{ color: rgba(241,236,224,0.6); font-size: 13px; text-decoration:none; border-bottom:1px solid transparent; }
+  .nav a:hover, .nav a.active{ color: var(--gold-2); border-color: var(--gold-2); }
+  .hero{ text-align:center; color: var(--paper); margin-bottom: 26px; }
+  .hero h1{ font-family:'Noto Serif KR', serif; font-size: 22px; font-weight:700; margin:0 0 6px; }
+  .hero p{ font-size: 12.5px; color: rgba(241,236,224,0.5); margin:0; }
+  .card{
+    background: var(--paper); border-radius: 14px; padding: 30px 26px;
+    box-shadow: 0 20px 45px -20px rgba(0,0,0,0.45);
+  }
+  .card h2{ font-family:'Noto Serif KR', serif; font-size: 16px; color: var(--ink); margin: 22px 0 8px; }
+  .card h2:first-child{ margin-top:0; }
+  .card p, .card li{ font-size: 13.5px; line-height: 1.75; color: var(--text); }
+  .card ul{ margin:0; padding-left: 20px; }
+  .updated{ font-size: 11.5px; color: var(--muted); text-align:right; margin-top: 24px; }
+  .source-note{ text-align:center; color: rgba(241,236,224,0.35); font-size: 10.5px; margin-top: 26px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="nav">
+    <a href="index.html">홈 (계산기)</a>
+    <a href="guide.html">활용 가이드</a>
+    <a href="privacy.html" class="active">개인정보처리방침</a>
+  </div>
+
+  <div class="hero">
+    <h1>개인정보처리방침</h1>
+    <p>내 월급 명세서 (이하 "본 사이트")</p>
+  </div>
+
+  <div class="card">
+    <h2>1. 수집하는 개인정보</h2>
+    <p>
+      본 사이트는 나이, 지역, 월급, 지출 항목 등 이용자가 입력하는 모든 정보를 <b>서버에 저장하지 않습니다.</b>
+      모든 계산은 이용자의 브라우저 안에서만 이루어지며, 페이지를 새로고침하거나 닫으면 입력한 정보는 즉시 사라집니다.
+      본 사이트를 운영하는 어떠한 주체도 입력하신 개인적인 재무 정보를 확인하거나 수집할 수 없습니다.
+    </p>
+  </div>
+
+  <div class="card">
+    <h2>2. 광고 및 쿠키 (Google AdSense)</h2>
+    <p>
+      본 사이트는 Google AdSense를 통해 광고를 게재할 수 있습니다. Google을 비롯한 제3자 공급업체는
+      쿠키(예: Google의 DART 쿠키)를 사용하여 이용자가 본 사이트 및 다른 사이트를 방문한 기록을 바탕으로
+      광고를 게재할 수 있습니다.
+    </p>
+    <p>
+      이용자는 Google 광고 설정 페이지(<a href="https://adssettings.google.com" target="_blank" rel="noopener">adssettings.google.com</a>)에서
+      맞춤 광고를 위한 쿠키 사용을 거부할 수 있습니다. 이 밖에도
+      <a href="https://www.aboutads.info" target="_blank" rel="noopener">aboutads.info</a> 페이지를 통해
+      제3자 공급업체의 맞춤 광고 쿠키 사용을 거부할 수 있습니다.
+    </p>
+  </div>
+
+  <div class="card">
+    <h2>3. 웹사이트 이용 통계</h2>
+    <p>
+      본 사이트는 서비스 개선을 위해 방문자 수, 페이지 조회수 등 비식별 통계 정보를 수집하는 분석 도구를
+      사용할 수 있습니다. 이 정보는 개인을 식별할 수 없는 형태로만 활용됩니다.
+    </p>
+  </div>
+
+  <div class="card">
+    <h2>4. 정보의 정확성에 대한 안내</h2>
+    <p>
+      본 사이트에서 제공하는 평균 월급·생활비·저축 시뮬레이션 등의 수치는 공개된 통계 자료의 흐름을
+      참고해 만든 <b>추정치</b>이며, 실제 통계 수치와 다를 수 있습니다. 본 사이트의 계산 결과는 참고용으로만
+      활용해 주시기 바라며, 이를 근거로 한 재무적 의사결정에 대해 본 사이트는 책임을 지지 않습니다.
+    </p>
+  </div>
+
+  <div class="card">
+    <h2>5. 문의</h2>
+    <p>
+      본 개인정보처리방침에 대해 궁금한 점이 있으시면 아래 블로그를 통해 문의해 주세요.<br/>
+      <a href="https://blog.naver.com/260823doit" target="_blank" rel="noopener">https://blog.naver.com/260823doit</a>
+    </p>
+  </div>
+
+  <div class="updated">본 방침은 2026년 9월부터 적용됩니다.</div>
+
+  <div class="source-note">© 2026 둥둥섬의동동. All rights reserved.</div>
+</div>
+</body>
+</html>

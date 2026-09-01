@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>내 월급 명세서 — 나이·지역별 비교</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700;900&family=Noto+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink: #1B2A4A;
+    --ink-2: #263A62;
+    --paper: #F1ECE0;
+    --paper-2: #E8E1D0;
+    --gold: #C9A227;
+    --gold-2: #E4C55C;
+    --stamp: #B03A2E;
+    --stamp-2: #2E7D46;
+    --text: #20242E;
+    --muted: #6B7488;
+    --line: rgba(27,42,74,0.14);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background: var(--ink);
+    background-image:
+      radial-gradient(circle at 15% 10%, rgba(255,255,255,0.05), transparent 40%),
+      radial-gradient(circle at 85% 90%, rgba(255,255,255,0.04), transparent 40%);
+    font-family: 'Noto Sans KR', sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+    display:flex;
+    justify-content:center;
+    padding: 40px 16px 80px;
+  }
+  .app{ width: 100%; max-width: 480px; }
+  .brand{ text-align:center; color: var(--paper); margin-bottom: 18px; }
+  .brand .mark{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:40px;height:40px; border: 1.5px solid var(--gold-2); border-radius: 50%;
+    color: var(--gold-2); font-family:'Noto Serif KR',serif; font-weight:900; font-size:16px;
+    margin-bottom: 10px;
+  }
+  .brand h1{ font-family:'Noto Serif KR', serif; font-weight:700; font-size: 22px; letter-spacing: 0.02em; margin: 0 0 4px; }
+  .brand p{ margin:0; font-size:12.5px; color: rgba(241,236,224,0.55); letter-spacing: 0.04em; }
+
+  /* TABS */
+  .tabs{
+    display:flex; gap:4px; margin-bottom: 14px;
+    background: rgba(241,236,224,0.06);
+    border: 1px solid rgba(241,236,224,0.14);
+    border-radius: 10px; padding: 4px;
+  }
+  .tab-btn{
+    flex:1; text-align:center; padding: 10px 4px;
+    font-family:'Noto Serif KR', serif; font-weight:700; font-size: 12px;
+    color: rgba(241,236,224,0.55); background: transparent; border:none; border-radius: 7px;
+    cursor:pointer; transition: all .15s ease;
+  }
+  .tab-btn.active{ background: linear-gradient(180deg, var(--gold-2), var(--gold)); color:#241C05; }
+  .tab-panel{ display:none; }
+  .tab-panel.active{ display:block; }
+
+  /* PASSBOOK CARD */
+  .passbook{
+    background: linear-gradient(160deg, var(--ink-2), var(--ink) 70%);
+    border-radius: 14px; padding: 26px 24px 24px; position:relative; overflow:hidden;
+    box-shadow: 0 30px 60px -20px rgba(0,0,0,0.6), inset 0 0 0 1px rgba(255,255,255,0.06);
+  }
+  .passbook::before{
+    content:""; position:absolute; top:-40%; right:-30%; width:220px; height:220px;
+    background: radial-gradient(circle, rgba(201,162,39,0.18), transparent 70%);
+  }
+  .passbook-header{ display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 20px; position:relative; }
+  .passbook-header .label{ font-family:'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: 0.12em; color: var(--gold-2); text-transform:uppercase; }
+  .passbook-header .title{ font-family:'Noto Serif KR', serif; color: var(--paper); font-size: 18px; font-weight: 700; margin-top: 4px; }
+  .passbook-header .no{ font-family:'IBM Plex Mono', monospace; color: rgba(241,236,224,0.4); font-size: 11px; text-align:right; }
+  .year-badge{
+    display:inline-block; margin-top:6px; font-family:'IBM Plex Mono', monospace;
+    font-size:10px; color: var(--ink); background: var(--gold-2); padding:2px 7px; border-radius: 20px;
+  }
+
+  .field{ margin-bottom: 16px; position:relative; }
+  .field label{ display:block; font-size: 12px; color: rgba(241,236,224,0.65); margin-bottom: 7px; letter-spacing:0.02em; }
+  .field input, .field select{
+    width:100%; background: rgba(241,236,224,0.06); border: 1px solid rgba(241,236,224,0.18);
+    border-radius: 8px; padding: 12px 40px 12px 14px; font-family:'IBM Plex Mono', monospace; font-size: 15px;
+    color: var(--paper); outline:none; transition: border-color .15s, background .15s;
+    appearance:none; -webkit-appearance:none; -moz-appearance:textfield;
+  }
+  .field input[data-unit]{ padding-right: 66px; }
+  .field input::-webkit-outer-spin-button, .field input::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0; }
+  .field select option{ color:#111; }
+  .field input::placeholder{ color: rgba(241,236,224,0.3); font-family:'Noto Sans KR',sans-serif; }
+  .field input:focus, .field select:focus{ border-color: var(--gold-2); background: rgba(241,236,224,0.1); }
+  .field .unit{ position:absolute; right:36px; top:38px; font-size:12.5px; color: rgba(241,236,224,0.45); font-family:'IBM Plex Mono', monospace; pointer-events:none; }
+  .field .stepper{ position:absolute; right:10px; top:33px; display:flex; flex-direction:column; cursor:pointer; user-select:none; gap:1px; z-index:2; }
+  .field .stepper span{ font-size:8px; line-height:8px; padding:2.5px 5px; color: rgba(241,236,224,0.4); border-radius:3px; }
+  .field .stepper span:hover{ color: var(--gold-2); background: rgba(241,236,224,0.08); }
+  .select-wrap{ position:relative; }
+  .select-wrap::after{ content:"▾"; position:absolute; right:14px; top:13px; color: rgba(241,236,224,0.5); font-size:12px; pointer-events:none; }
+
+  .preset-row{ display:flex; gap:6px; margin-top:8px; }
+  .preset-chip{
+    flex:1; text-align:center; padding:7px 4px; border-radius:6px; font-size:11.5px;
+    font-family:'IBM Plex Mono', monospace; color: rgba(241,236,224,0.7);
+    border:1px solid rgba(241,236,224,0.18); background: rgba(241,236,224,0.04); cursor:pointer;
+  }
+  .preset-chip:hover{ border-color: var(--gold-2); color: var(--gold-2); }
+
+  .submit-btn{
+    width:100%; margin-top: 6px; background: linear-gradient(180deg, var(--gold-2), var(--gold));
+    color: #241C05; border:none; border-radius: 8px; padding: 14px;
+    font-family:'Noto Serif KR', serif; font-weight:700; font-size: 15px; letter-spacing:0.03em; cursor:pointer;
+    transition: transform .12s ease;
+  }
+  .submit-btn:active{ transform: scale(0.98); }
+
+  /* RESULT STATEMENT */
+  .statement{
+    margin-top: 22px; background: var(--paper); border-radius: 14px; padding: 26px 22px 22px;
+    position: relative; overflow:hidden; box-shadow: 0 20px 45px -20px rgba(0,0,0,0.5); display:none;
+    background-image: repeating-linear-gradient(transparent, transparent 27px, var(--line) 28px);
+  }
+  .watermark-layer{
+    position:absolute; inset: -30% -10%; display:grid;
+    grid-template-columns: repeat(3, 1fr); align-content:space-around; justify-items:center;
+    gap: 34px 10px; transform: rotate(-24deg); pointer-events:none; z-index:0;
+  }
+  .watermark-layer span{
+    font-family:'Noto Serif KR', serif; font-weight:700; font-size: 13px;
+    color: rgba(27,42,74,0.07); white-space:nowrap;
+  }
+  .st-inner{ position:relative; z-index:1; }
+  .credit-line{
+    text-align:center; font-size: 10.5px; color: rgba(241,236,224,0.45);
+    margin-top: 8px; letter-spacing:0.02em;
+  }
+  .statement.show{ display:block; animation: rise .45s ease; }
+  @keyframes rise{ from{ opacity:0; transform: translateY(10px); } to{ opacity:1; transform: translateY(0); } }
+  .statement .st-head{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom: 14px; }
+  .statement .st-head .t{ font-family:'Noto Serif KR', serif; font-weight:700; font-size: 16px; color: var(--ink); }
+  .statement .st-head .d{ font-family:'IBM Plex Mono', monospace; font-size: 10.5px; color: var(--muted); }
+  .st-row{ display:flex; justify-content:space-between; align-items:center; padding: 9px 0; font-family:'IBM Plex Mono', monospace; font-size: 13.5px; }
+  .st-row .k{ color: var(--muted); font-family:'Noto Sans KR',sans-serif; font-size:13px; }
+  .st-row .v{ color: var(--text); font-weight:600; text-align:right; }
+  .st-row .v.pos{ color:#2E7D46; }
+  .st-row .v.neg{ color: var(--stamp); }
+  .st-row .v.small{ font-size:12px; font-weight:400; color:var(--muted); }
+  .st-divider{ height:1px; background: var(--line); margin: 6px 0 10px; }
+
+  .gauge-wrap{ margin: 16px 0 6px; }
+  .gauge-label{ display:flex; justify-content:space-between; font-size: 11px; color: var(--muted); margin-bottom: 6px; font-family:'IBM Plex Mono', monospace; }
+  .gauge{ position:relative; height: 10px; border-radius: 6px; background: rgba(27,42,74,0.08); overflow: visible; }
+  .gauge .fill{ position:absolute; left:0; top:0; height:100%; border-radius: 6px; background: linear-gradient(90deg, var(--ink-2), var(--ink)); transition: width .6s cubic-bezier(.2,.8,.2,1); }
+  .gauge .marker{ position:absolute; top:-4px; width: 3px; height: 18px; background: var(--gold); border-radius:2px; transform: translateX(-50%); left:50%; }
+
+  .stamp{
+    position:absolute; right: 18px; top: 14px; width: 86px; height: 86px; border-radius: 50%;
+    border: 2.5px solid var(--stamp); color: var(--stamp); display:flex; align-items:center; justify-content:center;
+    text-align:center; font-family:'Noto Serif KR', serif; font-weight:900; font-size: 12.5px; line-height:1.25;
+    transform: rotate(-14deg) scale(0.4); opacity:0; mix-blend-mode: multiply;
+  }
+  .stamp.green{ border-color: var(--stamp-2); color: var(--stamp-2); }
+  .statement.show .stamp{ animation: stampIn .35s ease .55s forwards; }
+  @keyframes stampIn{
+    0%{ opacity:0; transform: rotate(-14deg) scale(1.6); }
+    60%{ opacity:.9; transform: rotate(-14deg) scale(0.92); }
+    100%{ opacity:.92; transform: rotate(-14deg) scale(1); }
+  }
+  .stamp::before{ content:""; position:absolute; inset:5px; border: 1px solid currentColor; border-radius:50%; }
+
+  .chart-box{ margin-top: 20px; background: rgba(27,42,74,0.04); border-radius: 10px; padding: 14px 14px 6px; }
+  .chart-title{ font-size: 11.5px; color: var(--muted); font-family:'IBM Plex Mono', monospace; margin-bottom: 8px; }
+
+  .footnote{ margin-top: 14px; font-size: 11px; line-height:1.6; color: var(--muted); border-top: 1px dashed var(--line); padding-top: 10px; }
+
+  /* AFFILIATE CTA */
+  .cta{
+    margin-top: 16px; border-radius: 10px; padding: 14px 16px;
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    background: linear-gradient(135deg, #EFE6C8, #E8DDB8);
+    border: 1px solid rgba(201,162,39,0.4);
+  }
+  .cta .cta-text{ font-size: 12.5px; color: #4a3d10; line-height:1.4; }
+  .cta .cta-text b{ display:block; font-family:'Noto Serif KR',serif; font-size: 13.5px; margin-bottom:2px; }
+  .cta a.cta-btn{
+    flex-shrink:0; text-decoration:none; background: var(--ink); color: var(--gold-2);
+    font-size: 12px; font-weight:700; padding: 9px 14px; border-radius: 7px; white-space:nowrap;
+  }
+
+  .source-note{ text-align:center; color: rgba(241,236,224,0.35); font-size: 10.5px; margin-top: 20px; line-height:1.7; }
+
+  .site-nav{ display:flex; justify-content:center; gap: 16px; margin-top: 18px; }
+  .site-nav a{ color: rgba(241,236,224,0.5); font-size: 12px; text-decoration:none; }
+  .site-nav a:hover{ color: var(--gold-2); }
+
+  /* EXPENSE CALCULATOR (TAB 3) */
+  .exp-section{ margin-bottom: 18px; }
+  .exp-section-title{
+    font-family:'Noto Serif KR', serif; font-weight:700; font-size: 14px; color: var(--gold-2);
+    margin-bottom: 3px; display:flex; align-items:baseline; gap:8px;
+  }
+  .exp-section-desc{ font-family:'Noto Sans KR', sans-serif; font-weight:400; font-size: 11px; color: rgba(241,236,224,0.45); }
+  .exp-row{ display:flex; gap:7px; margin-bottom: 7px; }
+  .exp-name{
+    flex: 1.35; background: rgba(241,236,224,0.06); border: 1px solid rgba(241,236,224,0.16);
+    border-radius: 7px; padding: 9px 10px; font-family:'Noto Sans KR', sans-serif; font-size: 12.5px;
+    color: var(--paper); outline:none;
+  }
+  .exp-name::placeholder{ color: rgba(241,236,224,0.32); }
+  .exp-name:focus{ border-color: var(--gold-2); background: rgba(241,236,224,0.1); }
+  .exp-amt-wrap{
+    flex: 1; display:flex; align-items:center; background: rgba(241,236,224,0.06);
+    border: 1px solid rgba(241,236,224,0.16); border-radius: 7px; padding: 0 10px;
+  }
+  .exp-amt{
+    border:none; background:transparent; width:100%; padding: 9px 0; color: var(--paper);
+    font-family:'IBM Plex Mono', monospace; font-size: 13px; outline:none; -moz-appearance:textfield;
+  }
+  .exp-amt::-webkit-outer-spin-button, .exp-amt::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0; }
+  .exp-amt::placeholder{ color: rgba(241,236,224,0.25); }
+  .exp-amt-wrap:focus-within{ border-color: var(--gold-2); }
+  .exp-unit{ font-size: 10.5px; color: rgba(241,236,224,0.4); white-space:nowrap; padding-left:6px; }
+
+  .cat-total-row{ display:flex; justify-content:space-between; padding: 7px 0; font-family:'IBM Plex Mono', monospace; font-size: 13px; }
+  .cat-total-row .k{ color: var(--muted); font-family:'Noto Sans KR', sans-serif; font-size:12.5px; display:flex; align-items:center; gap:6px; }
+  .cat-total-row .k .dot{ width:8px; height:8px; border-radius:50%; display:inline-block; }
+  .cat-total-row .v{ color: var(--text); font-weight:600; }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="brand">
+    <div class="mark">通</div>
+    <h1>내 월급 명세서</h1>
+    <p>나이 · 지역별 평균 대비 나의 위치</p>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="1" onclick="switchTab(1)">① 월급 비교</button>
+    <button class="tab-btn" data-tab="2" onclick="switchTab(2)">② 저축 시뮬레이션</button>
+    <button class="tab-btn" data-tab="3" onclick="switchTab(3)">③ 지출 계산기</button>
+  </div>
+
+  <!-- TAB 1 -->
+  <div class="tab-panel active" id="panel1">
+    <div class="passbook">
+      <div class="passbook-header">
+        <div>
+          <div class="label">Deposit Slip</div>
+          <div class="title">정보 입력</div>
+          <div class="year-badge" id="yearBadge1"></div>
+        </div>
+        <div class="no" id="slipNo">NO. 000000</div>
+      </div>
+
+      <div class="field">
+        <label>나이</label>
+        <input type="number" id="age" placeholder="예: 32" min="15" max="99" />
+        <div class="stepper"><span onclick="stepValue('age',1,15,99)">▲</span><span onclick="stepValue('age',-1,15,99)">▼</span></div>
+      </div>
+
+      <div class="field">
+        <label>거주 지역</label>
+        <div class="select-wrap"><select id="region"></select></div>
+      </div>
+
+      <div class="field">
+        <label>가구원 수</label>
+        <div class="select-wrap"><select id="household"></select></div>
+      </div>
+
+      <div class="field">
+        <label>월 실수령 급여</label>
+        <input type="number" id="salary" placeholder="예: 320" data-unit="true" />
+        <div class="unit">만원</div>
+        <div class="stepper"><span onclick="stepValue('salary',1,0)">▲</span><span onclick="stepValue('salary',-1,0)">▼</span></div>
+      </div>
+
+      <button class="submit-btn" onclick="calculate()">명세서 발급하기</button>
+    </div>
+
+    <div class="statement" id="statement">
+      <div class="watermark-layer">
+        <span>둥둥섬의동동</span><span>둥둥섬의동동</span><span>둥둥섬의동동</span>
+        <span>둥둥섬의동동</span><span>둥둥섬의동동</span><span>둥둥섬의동동</span>
+        <span>둥둥섬의동동</span><span>둥둥섬의동동</span><span>둥둥섬의동동</span>
+      </div>
+      <div class="st-inner">
+      <div class="stamp" id="stampText">상위<br/>-</div>
+      <div class="st-head"><div class="t">비교 명세서</div><div class="d" id="stDate"></div></div>
+
+      <div class="st-row"><div class="k">입력한 월급</div><div class="v" id="rMySalary">-</div></div>
+      <div class="st-row"><div class="k">내 나이대·지역 평균 월급</div><div class="v" id="rAvgSalary">-</div></div>
+      <div class="st-row"><div class="k">내 위치 (추정)</div><div class="v" id="rPercentile">-</div></div>
+
+      <div class="gauge-wrap">
+        <div class="gauge-label"><span>하위</span><span>평균</span><span>상위</span></div>
+        <div class="gauge"><div class="fill" id="gaugeSalaryFill"></div><div class="marker"></div></div>
+      </div>
+
+      <div class="st-divider"></div>
+
+      <div class="st-row"><div class="k">내 지역·나이대 평균 생활비</div><div class="v" id="rLivingCost">-</div></div>
+      <div class="st-row"><div class="k"></div><div class="v small" id="rLivingRange">-</div></div>
+      <div class="st-row"><div class="k">예상 저축 여력</div><div class="v" id="rSavings">-</div></div>
+
+      <div class="chart-box">
+        <div class="chart-title">나이대별 전국 평균 월급 비교 (만원)</div>
+        <canvas id="ageChart" height="150"></canvas>
+      </div>
+
+      <div class="cta" id="ctaBox">
+        <div class="cta-text" id="ctaText"><b>-</b>-</div>
+        <a href="#" class="cta-btn" id="ctaBtn" target="_blank" rel="noopener">바로가기</a>
+      </div>
+
+      <div class="footnote" id="footnote1">
+        ※ 본 결과는 <b>2024년 통계 흐름을 기준으로, 이후 임금상승률(약 연 2.3%)과 물가상승률(약 연 2%)을 반영해 2026년 시점에 맞게 보정한 추정치</b>입니다. 지역×나이대가 교차된 공식 통계는 정부에서 별도로 발표하지 않아 완전한 실측치가 아니며, 실제 개인·지역별 수치와 차이가 있을 수 있으니 참고용으로만 활용해 주세요. 가구원 수가 늘어도 생활비가 인원수만큼 정비례로 증가하지 않는 '규모의 경제'를 반영해 계산했습니다.
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2 -->
+  <div class="tab-panel" id="panel2">
+    <div class="passbook">
+      <div class="passbook-header">
+        <div>
+          <div class="label">Savings Plan</div>
+          <div class="title">저축 계획 입력</div>
+        </div>
+        <div class="no" id="slipNo2">NO. 000000</div>
+      </div>
+
+      <div class="field">
+        <label>월 저축액</label>
+        <input type="number" id="monthlySaving" placeholder="예: 50" data-unit="true" />
+        <div class="unit">만원</div>
+        <div class="stepper"><span onclick="stepValue('monthlySaving',1,0)">▲</span><span onclick="stepValue('monthlySaving',-1,0)">▼</span></div>
+      </div>
+
+      <div class="field">
+        <label>예상 연 수익률</label>
+        <input type="number" id="annualRate" placeholder="예: 3.5" step="0.1" value="3.5" data-unit="true" />
+        <div class="unit">%</div>
+        <div class="stepper"><span onclick="stepValue('annualRate',0.1,0,undefined,1)">▲</span><span onclick="stepValue('annualRate',-0.1,0,undefined,1)">▼</span></div>
+        <div class="preset-row">
+          <div class="preset-chip" onclick="setRate(3.5)">적금형 3.5%</div>
+          <div class="preset-chip" onclick="setRate(5)">혼합형 5%</div>
+          <div class="preset-chip" onclick="setRate(7)">투자형 7%</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>저축 기간</label>
+        <input type="number" id="years" placeholder="예: 5" value="5" data-unit="true" />
+        <div class="unit">년</div>
+        <div class="stepper"><span onclick="stepValue('years',1,1)">▲</span><span onclick="stepValue('years',-1,1)">▼</span></div>
+      </div>
+
+      <div class="field">
+        <label>목표 금액 (선택)</label>
+        <input type="number" id="goalAmount" placeholder="선택 입력 — 예: 3000" data-unit="true" />
+        <div class="unit">만원</div>
+        <div class="stepper"><span onclick="stepValue('goalAmount',100,0)">▲</span><span onclick="stepValue('goalAmount',-100,0)">▼</span></div>
+      </div>
+
+      <button class="submit-btn" onclick="calculateSavings()">저축 계획 계산하기</button>
+    </div>
+
+    <div class="statement" id="statement2">
+      <div class="watermark-layer">
+        <span>둥둥섬의동동</span><span>둥둥섬의동동</span><span>둥둥섬의동동</span>
+        <span>둥둥섬의동동</span><span>둥둥섬의동동</span><span>둥둥섬의동동</span>
+        <span>둥둥섬의동동</span><span>둥둥섬의동동</span><span>둥둥섬의동동</span>
+      </div>
+      <div class="st-inner">
+      <div class="stamp green" id="stampText2">예상<br/>수익</div>
+      <div class="st-head"><div class="t">저축 시뮬레이션 결과</div><div class="d" id="stDate2"></div></div>
+
+      <div class="st-row"><div class="k">총 납입 원금</div><div class="v" id="rPrincipal">-</div></div>
+      <div class="st-row"><div class="k">예상 이자·수익</div><div class="v pos" id="rInterest">-</div></div>
+      <div class="st-divider"></div>
+      <div class="st-row"><div class="k">만기 예상 총자산</div><div class="v" id="rTotal">-</div></div>
+      <div class="st-row" id="goalRow" style="display:none;">
+        <div class="k">목표 금액 도달까지</div><div class="v" id="rGoalTime">-</div>
+      </div>
+
+      <div class="chart-box">
+        <div class="chart-title">저축 원금 vs 총 자산 성장 추이</div>
+        <canvas id="savingChart" height="150"></canvas>
+      </div>
+
+      <div class="cta">
+        <div class="cta-text"><b>정기적금/예금 비교해보기</b>더 높은 금리 상품을 찾아보세요</div>
+        <a href="#" class="cta-btn" target="_blank" rel="noopener">바로가기</a>
+      </div>
+
+      <div class="footnote">
+        ※ 월복리 기준의 단순 추정치이며, 세금(이자소득세)·수수료는 반영되지 않았습니다. 실제 상품 조건에 따라 결과가 달라질 수 있습니다.
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3 -->
+  <div class="tab-panel" id="panel3">
+    <div class="passbook">
+      <div class="passbook-header">
+        <div>
+          <div class="label">Expense Sheet</div>
+          <div class="title">한 달 지출 계산기</div>
+        </div>
+        <div class="no" id="slipNo3">NO. 000000</div>
+      </div>
+
+      <div class="field">
+        <label>월급 (실수령액)</label>
+        <input type="number" id="expSalary" placeholder="예: 320" data-unit="true" />
+        <div class="unit">만원</div>
+        <div class="stepper"><span onclick="stepValue('expSalary',1,0)">▲</span><span onclick="stepValue('expSalary',-1,0)">▼</span></div>
+      </div>
+
+      <div id="expenseCategories"></div>
+
+      <button class="submit-btn" onclick="calculateExpense()">지출 계산하기</button>
+    </div>
+
+    <div class="statement" id="statement3">
+      <div class="watermark-layer">
+        <span>둥둥섬의동동</span><span>둥둥섬의동동</span><span>둥둥섬의동동</span>
+        <span>둥둥섬의동동</span><span>둥둥섬의동동</span><span>둥둥섬의동동</span>
+        <span>둥둥섬의동동</span><span>둥둥섬의동동</span><span>둥둥섬의동동</span>
+      </div>
+      <div class="st-inner">
+      <div class="stamp" id="stampText3">지출<br/>-</div>
+      <div class="st-head"><div class="t">이번 달 지출 명세서</div><div class="d" id="stDate3"></div></div>
+
+      <div id="catTotalsBox"></div>
+
+      <div class="st-divider"></div>
+      <div class="st-row"><div class="k">총 지출</div><div class="v" id="rExpTotal">-</div></div>
+      <div class="st-row"><div class="k">월급 대비 남는 돈</div><div class="v" id="rExpRemain">-</div></div>
+
+      <div class="chart-box">
+        <div class="chart-title">카테고리별 지출 비중</div>
+        <canvas id="expChart" height="180"></canvas>
+      </div>
+
+      <div class="cta">
+        <div class="cta-text"><b>지출 항목 더 다듬고 싶다면</b>가계부 관리 팁을 확인해보세요</div>
+        <a href="https://blog.naver.com/260823doit" class="cta-btn" target="_blank" rel="noopener">바로가기</a>
+      </div>
+
+      <div class="footnote">
+        ※ 입력하신 항목·금액은 저장되지 않으며 화면에서만 계산됩니다. 실제 지출 습관에 맞게 항목명은 자유롭게 바꿔서 사용하세요.
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="source-note">
+    참고: 통계청 임금·가계동향 관련 공표자료 흐름을 반영한 추정 지수<br/>
+    입력하신 정보는 저장되지 않으며 화면에서만 계산됩니다.
+  </div>
+  <div class="credit-line">© 2026 <a href="https://blog.naver.com/260823doit" target="_blank" rel="noopener" style="color:inherit; text-decoration:underline;">둥둥섬의동동</a>. All rights reserved.</div>
+  <div class="site-nav">
+    <a href="guide.html">활용 가이드</a>
+    <a href="privacy.html">개인정보처리방침</a>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script>
+/* ---------------- 공통 데이터 (통계 기반 추정치) ---------------- */
+const DATA_YEAR = 2026;
+const BASE_YEAR = 2024;
+
+const AGE_BRACKETS = [
+  { key: '20s', label: '20대', min: 20, max: 29, wage: 272, living: 192 },
+  { key: '30s', label: '30대', min: 30, max: 39, wage: 361, living: 244 },
+  { key: '40s', label: '40대', min: 40, max: 49, wage: 419, living: 276 },
+  { key: '50s', label: '50대', min: 50, max: 59, wage: 403, living: 260 },
+  { key: '60s', label: '60대 이상', min: 60, max: 120, wage: 277, living: 213 },
+];
+
+const REGIONS = [
+  { name: '서울', wageIdx: 1.16, livingIdx: 1.28 },
+  { name: '경기', wageIdx: 1.06, livingIdx: 1.12 },
+  { name: '인천', wageIdx: 0.96, livingIdx: 1.00 },
+  { name: '부산', wageIdx: 0.93, livingIdx: 0.96 },
+  { name: '대구', wageIdx: 0.90, livingIdx: 0.92 },
+  { name: '광주', wageIdx: 0.92, livingIdx: 0.90 },
+  { name: '대전', wageIdx: 0.95, livingIdx: 0.95 },
+  { name: '울산', wageIdx: 1.07, livingIdx: 0.97 },
+  { name: '세종', wageIdx: 1.05, livingIdx: 1.02 },
+  { name: '강원', wageIdx: 0.86, livingIdx: 0.90 },
+  { name: '충북', wageIdx: 0.91, livingIdx: 0.88 },
+  { name: '충남', wageIdx: 0.96, livingIdx: 0.89 },
+  { name: '전북', wageIdx: 0.86, livingIdx: 0.85 },
+  { name: '전남', wageIdx: 0.86, livingIdx: 0.85 },
+  { name: '경북', wageIdx: 0.89, livingIdx: 0.86 },
+  { name: '경남', wageIdx: 0.93, livingIdx: 0.89 },
+  { name: '제주', wageIdx: 0.89, livingIdx: 1.06 },
+];
+
+// 소득 분포 가정 (로그정규분포, 변동계수 약 0.44 — 국내 임금분포 특성 반영한 추정)
+const LOGNORMAL_SIGMA = 0.42;
+const LIVING_RANGE_PCT = 0.10; // 생활비 추정 범위 ±10%
+
+// 가구원 수별 생활비 균등화 지수 (1인가구 = 1.0 기준, 통계청 가계동향조사 소비지출 경향 반영한 추정 배율)
+// 가구원이 늘어도 생활비가 인원수만큼 정비례로 늘지 않는 '규모의 경제'를 반영
+const HOUSEHOLD_MULT = { 1: 1.00, 2: 1.62, 3: 2.05, 4: 2.35, 5: 2.60 };
+
+const regionSelect = document.getElementById('region');
+REGIONS.forEach((r, i) => {
+  const opt = document.createElement('option');
+  opt.value = i; opt.textContent = r.name;
+  regionSelect.appendChild(opt);
+});
+
+const householdSelect = document.getElementById('household');
+[1,2,3,4,5].forEach(n => {
+  const opt = document.createElement('option');
+  opt.value = n; opt.textContent = n + '인 가구' + (n===1?' (1인 기준)':'');
+  if(n===2) opt.selected = true;
+  householdSelect.appendChild(opt);
+});
+document.getElementById('slipNo').textContent = 'NO. ' + Math.floor(100000 + Math.random()*899999);
+document.getElementById('slipNo2').textContent = 'NO. ' + Math.floor(100000 + Math.random()*899999);
+document.getElementById('yearBadge1').textContent = DATA_YEAR + '년 보정 추정치';
+
+function stepValue(id, delta, min, max, decimals){
+  const el = document.getElementById(id);
+  let v = parseFloat(el.value);
+  if(isNaN(v)) v = 0;
+  v += delta;
+  if(min !== undefined && v < min) v = min;
+  if(max !== undefined && v > max) v = max;
+  el.value = decimals ? parseFloat(v.toFixed(decimals)) : v;
+}
+
+function findBracket(age){ return AGE_BRACKETS.find(b => age >= b.min && age <= b.max) || AGE_BRACKETS[AGE_BRACKETS.length-1]; }
+function fmt(n){ return Math.round(n).toLocaleString('ko-KR') + '만원'; }
+
+function erf(x){
+  const sign = x >= 0 ? 1 : -1; x = Math.abs(x);
+  const a1=0.254829592,a2=-0.284496736,a3=1.421413741,a4=-1.453152027,a5=1.061405429,p=0.3275911;
+  const t = 1/(1+p*x);
+  const y = 1 - (((((a5*t+a4)*t)+a3)*t+a2)*t+a1)*t*Math.exp(-x*x);
+  return sign*y;
+}
+function normalCDF(z){ return 0.5 * (1 + erf(z/Math.SQRT2)); }
+function percentileOf(salary, mean){
+  const sigma = LOGNORMAL_SIGMA;
+  const mu = Math.log(mean) - 0.5*sigma*sigma;
+  const z = (Math.log(salary) - mu) / sigma;
+  let pct = normalCDF(z) * 100;
+  return Math.min(99, Math.max(1, pct));
+}
+
+let chartInstance = null;
+let lastSavings = null;
+
+function switchTab(n){
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab == n));
+  document.getElementById('panel1').classList.toggle('active', n===1);
+  document.getElementById('panel2').classList.toggle('active', n===2);
+  document.getElementById('panel3').classList.toggle('active', n===3);
+  if(n===2 && lastSavings !== null){
+    const field = document.getElementById('monthlySaving');
+    if(!field.value){ field.value = Math.max(0, Math.round(lastSavings)); }
+  }
+}
+
+function calculate(){
+  const age = parseInt(document.getElementById('age').value, 10);
+  const salary = parseFloat(document.getElementById('salary').value);
+  const regionIdx = parseInt(regionSelect.value, 10);
+
+  if(!age || age < 15 || age > 99 || !salary || salary <= 0 || isNaN(regionIdx)){
+    alert('나이와 월급을 정확히 입력해 주세요.');
+    return;
+  }
+
+  const region = REGIONS[regionIdx];
+  const bracket = findBracket(age);
+  const householdSize = parseInt(householdSelect.value, 10) || 1;
+  const householdMult = HOUSEHOLD_MULT[householdSize];
+
+  const avgWage = bracket.wage * region.wageIdx;
+  const avgLivingPerson = bracket.living * region.livingIdx;
+  const avgLiving = avgLivingPerson * householdMult;
+  const livingLow = avgLiving * (1 - LIVING_RANGE_PCT);
+  const livingHigh = avgLiving * (1 + LIVING_RANGE_PCT);
+  const savings = salary - avgLiving;
+  lastSavings = savings;
+
+  const pct = percentileOf(salary, avgWage);
+  const topPct = 100 - pct;
+
+  document.getElementById('rMySalary').textContent = fmt(salary);
+  document.getElementById('rAvgSalary').textContent = fmt(avgWage) + ' (' + bracket.label + ' · ' + region.name + ')';
+
+  const pctEl = document.getElementById('rPercentile');
+  pctEl.textContent = '상위 ' + topPct.toFixed(1) + '%';
+  pctEl.className = 'v ' + (topPct <= 50 ? 'pos' : 'neg');
+
+  document.getElementById('rLivingCost').textContent = '평균 ' + fmt(avgLiving) + ' (' + householdSize + '인 가구)';
+  document.getElementById('rLivingRange').textContent = '추정 범위 ' + Math.round(livingLow).toLocaleString('ko-KR') + '~' + Math.round(livingHigh).toLocaleString('ko-KR') + '만원 (±' + (LIVING_RANGE_PCT*100).toFixed(0) + '%)';
+
+  const savingsEl = document.getElementById('rSavings');
+  savingsEl.textContent = (savings >= 0 ? '+' : '-') + fmt(Math.abs(savings));
+  savingsEl.className = 'v ' + (savings >= 0 ? 'pos' : 'neg');
+
+  document.getElementById('gaugeSalaryFill').style.width = pct + '%';
+
+  const stampEl = document.getElementById('stampText');
+  stampEl.innerHTML = '상위<br/>' + topPct.toFixed(0) + '%';
+
+  document.getElementById('stDate').textContent = new Date().toLocaleDateString('ko-KR', {year:'numeric', month:'2-digit', day:'2-digit'}) + ' (' + BASE_YEAR + '년 통계 + 상승률 반영 ' + DATA_YEAR + '년 추정)';
+
+  // CTA 분기
+  const ctaText = document.getElementById('ctaText');
+  const ctaBtn = document.getElementById('ctaBtn');
+  if(savings >= 0){
+    ctaText.innerHTML = '<b>저축 여력이 있으시네요</b>더 높은 금리의 예적금 상품을 비교해보세요';
+    ctaBtn.textContent = '금리 비교하기';
+    ctaBtn.href = '#'; // TODO: 실제 제휴 링크로 교체
+  } else {
+    ctaText.innerHTML = '<b>지출 구조를 점검해볼 시점</b>가계부·재테크 팁 콘텐츠를 확인해보세요';
+    ctaBtn.textContent = '팁 보러가기';
+    ctaBtn.href = 'https://blog.naver.com/260823doit';
+  }
+
+  const statementEl = document.getElementById('statement');
+  statementEl.classList.remove('show'); void statementEl.offsetWidth; statementEl.classList.add('show');
+
+  const labels = AGE_BRACKETS.map(b => b.label);
+  const data = AGE_BRACKETS.map(b => Math.round(b.wage * region.wageIdx));
+  const colors = AGE_BRACKETS.map(b => b.key === bracket.key ? '#C9A227' : 'rgba(27,42,74,0.35)');
+
+  const ctx = document.getElementById('ageChart').getContext('2d');
+  if(chartInstance) chartInstance.destroy();
+  chartInstance = new Chart(ctx, {
+    type: 'bar',
+    data: { labels, datasets: [{ data, backgroundColor: colors, borderRadius: 5, barPercentage: 0.6 }] },
+    options: {
+      responsive: true,
+      plugins: { legend: { display:false }, tooltip: { callbacks: { label: (c) => c.parsed.y + '만원' } } },
+      scales: {
+        y: { beginAtZero:true, ticks: { font: { size: 10 } }, grid: { color:'rgba(27,42,74,0.06)' } },
+        x: { ticks: { font: { size: 11 } }, grid: { display:false } }
+      }
+    }
+  });
+
+  statementEl.scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+
+function setRate(v){ document.getElementById('annualRate').value = v; }
+
+let savingChartInstance = null;
+
+function calculateSavings(){
+  const monthly = parseFloat(document.getElementById('monthlySaving').value);
+  const rate = parseFloat(document.getElementById('annualRate').value);
+  const years = parseFloat(document.getElementById('years').value);
+  const goal = parseFloat(document.getElementById('goalAmount').value);
+
+  if(!monthly || monthly <= 0 || !years || years <= 0 || isNaN(rate) || rate < 0){
+    alert('월 저축액과 기간을 정확히 입력해 주세요.');
+    return;
+  }
+
+  const months = Math.round(years * 12);
+  const monthlyRate = (rate/100)/12;
+
+  function fvAt(n){
+    if(monthlyRate === 0) return monthly * n;
+    return monthly * (((Math.pow(1+monthlyRate, n) - 1)) / monthlyRate);
+  }
+
+  const totalPrincipal = monthly * months;
+  const totalFV = fvAt(months);
+  const totalInterest = totalFV - totalPrincipal;
+
+  document.getElementById('rPrincipal').textContent = fmt(totalPrincipal);
+  document.getElementById('rInterest').textContent = '+' + fmt(totalInterest);
+  document.getElementById('rTotal').textContent = fmt(totalFV);
+
+  const stampEl = document.getElementById('stampText2');
+  const returnPct = totalPrincipal > 0 ? (totalInterest/totalPrincipal*100) : 0;
+  stampEl.innerHTML = '수익률<br/>+' + returnPct.toFixed(1) + '%';
+
+  const goalRow = document.getElementById('goalRow');
+  if(goal && goal > 0){
+    goalRow.style.display = 'flex';
+    let goalMonths;
+    if(monthlyRate === 0){
+      goalMonths = goal / monthly;
+    } else {
+      const ratio = 1 + (goal * monthlyRate) / monthly;
+      goalMonths = ratio > 0 ? Math.log(ratio) / Math.log(1+monthlyRate) : Infinity;
+    }
+    if(!isFinite(goalMonths) || goalMonths < 0){
+      document.getElementById('rGoalTime').textContent = '계산 불가';
+    } else {
+      const y = Math.floor(goalMonths/12), m = Math.round(goalMonths%12);
+      document.getElementById('rGoalTime').textContent = (y>0? y+'년 ':'') + m + '개월';
+    }
+  } else {
+    goalRow.style.display = 'none';
+  }
+
+  document.getElementById('stDate2').textContent = new Date().toLocaleDateString('ko-KR', {year:'numeric', month:'2-digit', day:'2-digit'});
+
+  const statementEl2 = document.getElementById('statement2');
+  statementEl2.classList.remove('show'); void statementEl2.offsetWidth; statementEl2.classList.add('show');
+
+  // 연도별 성장 곡선
+  const yearLabels = [];
+  const principalSeries = [];
+  const totalSeries = [];
+  const stepYears = Math.max(1, Math.round(years));
+  for(let y=0; y<=stepYears; y++){
+    const n = Math.round(y*12);
+    yearLabels.push(y + '년');
+    principalSeries.push(Math.round(monthly * n));
+    totalSeries.push(Math.round(fvAt(n)));
+  }
+
+  const ctx2 = document.getElementById('savingChart').getContext('2d');
+  if(savingChartInstance) savingChartInstance.destroy();
+  savingChartInstance = new Chart(ctx2, {
+    type: 'line',
+    data: {
+      labels: yearLabels,
+      datasets: [
+        { label: '원금 누적', data: principalSeries, borderColor:'rgba(27,42,74,0.45)', backgroundColor:'transparent', borderDash:[4,3], tension:0.25 },
+        { label: '총 자산', data: totalSeries, borderColor:'#C9A227', backgroundColor:'rgba(201,162,39,0.12)', fill:true, tension:0.25 }
+      ]
+    },
+    options: {
+      responsive:true,
+      plugins:{ legend:{ display:true, labels:{ font:{size:10.5}, boxWidth:12 } }, tooltip:{ callbacks:{ label:(c)=> c.dataset.label+': '+c.parsed.y.toLocaleString('ko-KR')+'만원' } } },
+      scales:{
+        y:{ beginAtZero:true, ticks:{ font:{size:10} }, grid:{ color:'rgba(27,42,74,0.06)' } },
+        x:{ ticks:{ font:{size:10.5} }, grid:{ display:false } }
+      }
+    }
+  });
+
+  statementEl2.scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+
+/* ---------------- TAB 3: 지출 계산기 ---------------- */
+const EXPENSE_CATEGORIES = [
+  { key:'fixed',   label:'고정지출',    color:'#1B2A4A', desc:'매달 금액이 거의 고정된 지출',
+    placeholders:['월세/관리비','통신비','보험료','대출상환','구독서비스','기타 고정비'] },
+  { key:'living',  label:'생활비',      color:'#C9A227', desc:'매달 변동이 있는 기본 생활 지출',
+    placeholders:['식비','교통비','생필품','의류/미용','자녀·양육비','기타 생활비'] },
+  { key:'saving',  label:'저축·투자',   color:'#2E7D46', desc:'미래를 위해 따로 떼어두는 금액',
+    placeholders:['정기적금','펀드/주식투자','연금저축','비상금 저축','목돈 모으기','기타 저축'] },
+  { key:'leisure', label:'여가·문화',   color:'#6B7488', desc:'삶의 질을 위한 소비',
+    placeholders:['외식/카페','취미활동','여행 경비','문화생활(영화 등)','쇼핑','기타 여가비'] },
+  { key:'etc',     label:'예비비·경조사', color:'#B03A2E', desc:'비정기적으로 발생하는 지출',
+    placeholders:['경조사비','병원/의료비','명절 비용','차량 유지비','가전/가구 구입','기타 예비비'] },
+];
+
+function renderExpenseForm(){
+  const container = document.getElementById('expenseCategories');
+  container.innerHTML = '';
+  EXPENSE_CATEGORIES.forEach(cat => {
+    const section = document.createElement('div');
+    section.className = 'exp-section';
+    const title = document.createElement('div');
+    title.className = 'exp-section-title';
+    title.innerHTML = cat.label + '<span class="exp-section-desc">' + cat.desc + '</span>';
+    section.appendChild(title);
+    for(let i=0;i<6;i++){
+      const row = document.createElement('div');
+      row.className = 'exp-row';
+      row.innerHTML =
+        '<input type="text" class="exp-name" id="'+cat.key+'_name_'+i+'" placeholder="'+cat.placeholders[i]+'" />' +
+        '<div class="exp-amt-wrap"><input type="number" class="exp-amt" id="'+cat.key+'_amt_'+i+'" placeholder="0" /><span class="exp-unit">만원</span></div>';
+      section.appendChild(row);
+    }
+    container.appendChild(section);
+  });
+}
+renderExpenseForm();
+document.getElementById('slipNo3').textContent = 'NO. ' + Math.floor(100000 + Math.random()*899999);
+
+let expChartInstance = null;
+
+function calculateExpense(){
+  const salary = parseFloat(document.getElementById('expSalary').value);
+  if(!salary || salary <= 0){
+    alert('월급(실수령액)을 정확히 입력해 주세요.');
+    return;
+  }
+
+  const catTotals = {};
+  let grandTotal = 0;
+  EXPENSE_CATEGORIES.forEach(cat => {
+    let sum = 0;
+    for(let i=0;i<6;i++){
+      const v = parseFloat(document.getElementById(cat.key+'_amt_'+i).value);
+      if(!isNaN(v)) sum += v;
+    }
+    catTotals[cat.key] = sum;
+    grandTotal += sum;
+  });
+
+  const remaining = salary - grandTotal;
+
+  const catBox = document.getElementById('catTotalsBox');
+  catBox.innerHTML = EXPENSE_CATEGORIES.map(cat =>
+    '<div class="cat-total-row"><div class="k"><span class="dot" style="background:'+cat.color+'"></span>'+cat.label+'</div><div class="v">'+fmt(catTotals[cat.key])+'</div></div>'
+  ).join('');
+
+  document.getElementById('rExpTotal').textContent = fmt(grandTotal);
+  const remainEl = document.getElementById('rExpRemain');
+  remainEl.textContent = (remaining >= 0 ? '+' : '-') + fmt(Math.abs(remaining));
+  remainEl.className = 'v ' + (remaining >= 0 ? 'pos' : 'neg');
+
+  const stampEl = document.getElementById('stampText3');
+  const usedPct = grandTotal > 0 ? (grandTotal/salary*100) : 0;
+  stampEl.innerHTML = '지출<br/>' + usedPct.toFixed(0) + '%';
+
+  document.getElementById('stDate3').textContent = new Date().toLocaleDateString('ko-KR', {year:'numeric', month:'2-digit', day:'2-digit'});
+
+  const statementEl3 = document.getElementById('statement3');
+  statementEl3.classList.remove('show'); void statementEl3.offsetWidth; statementEl3.classList.add('show');
+
+  const ctx3 = document.getElementById('expChart').getContext('2d');
+  if(expChartInstance) expChartInstance.destroy();
+  const labels = EXPENSE_CATEGORIES.map(c => c.label);
+  const data = EXPENSE_CATEGORIES.map(c => catTotals[c.key]);
+  const colors = EXPENSE_CATEGORIES.map(c => c.color);
+  expChartInstance = new Chart(ctx3, {
+    type: 'doughnut',
+    data: { labels, datasets: [{ data, backgroundColor: colors, borderColor: '#F1ECE0', borderWidth: 2 }] },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position:'bottom', labels:{ font:{size:10.5}, boxWidth:11, color:'#20242E' } },
+        tooltip: { callbacks: { label:(c)=> c.label+': '+c.parsed.toLocaleString('ko-KR')+'만원' } }
+      }
+    }
+  });
+
+  statementEl3.scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+</script>
+</body>
+</html>
