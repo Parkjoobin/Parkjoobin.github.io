@@ -45,6 +45,15 @@
   .brand h1{ font-family:'Noto Serif KR', serif; font-weight:700; font-size: 22px; letter-spacing: 0.02em; margin: 0 0 4px; }
   .brand p{ margin:0; font-size:12.5px; color: rgba(241,236,224,0.55); letter-spacing: 0.04em; }
 
+  .guide-banner{
+    display:block; text-align:center; margin: 16px 0 18px; padding: 12px 14px;
+    border: 1px solid rgba(228,197,92,0.45); border-radius: 10px;
+    background: rgba(228,197,92,0.09); color: var(--gold-2);
+    font-family:'Noto Serif KR', serif; font-weight:700; font-size: 13.5px; text-decoration:none;
+    transition: background .15s;
+  }
+  .guide-banner:hover{ background: rgba(228,197,92,0.16); }
+
   /* TABS */
   .tabs{
     display:flex; gap:4px; margin-bottom: 14px;
@@ -193,8 +202,8 @@
 
   .source-note{ text-align:center; color: rgba(241,236,224,0.35); font-size: 10.5px; margin-top: 20px; line-height:1.7; }
 
-  .site-nav{ display:flex; justify-content:center; gap: 16px; margin-top: 18px; }
-  .site-nav a{ color: rgba(241,236,224,0.5); font-size: 12px; text-decoration:none; }
+  .site-nav{ display:flex; justify-content:center; gap: 20px; margin-top: 18px; }
+  .site-nav a{ color: rgba(241,236,224,0.7); font-size: 13px; font-weight:600; text-decoration:underline; }
   .site-nav a:hover{ color: var(--gold-2); }
 
   /* EXPENSE CALCULATOR (TAB 3) */
@@ -301,6 +310,8 @@
     <h1>내 월급 명세서</h1>
     <p>나이 · 지역별 평균 대비 나의 위치</p>
   </div>
+
+  <a class="guide-banner" href="guide.html">📖 처음이신가요? 3분 활용 가이드 먼저 보기 →</a>
 
   <div class="tabs">
     <button class="tab-btn active" data-tab="1" onclick="switchTab(1)">① 월급</button>
