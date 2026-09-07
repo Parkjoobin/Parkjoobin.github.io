@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>2026년 나이대별 평균 월급, 어떻게 봐야 할까 — 내 월급 명세서</title>
+<meta name="description" content="평균과 중위값의 차이, 나이대별·지역별 소득 격차가 생기는 이유와 통계를 읽을 때 주의할 점을 정리했습니다." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700;900&family=Noto+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1B2A4A; --ink-2:#263A62; --paper:#F1ECE0; --gold:#C9A227; --gold-2:#E4C55C;
+    --stamp:#B03A2E; --stamp-2:#2E7D46; --text:#20242E; --muted:#6B7488; --line:rgba(27,42,74,0.14);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{ background: var(--ink); font-family:'Noto Sans KR', sans-serif; color: var(--text); display:flex; justify-content:center; padding: 40px 16px 90px; }
+  .wrap{ width:100%; max-width: 640px; }
+  .nav{ display:flex; justify-content:center; gap: 18px; margin-bottom: 26px; flex-wrap:wrap; }
+  .nav a{ color: rgba(241,236,224,0.6); font-size: 13px; text-decoration:none; border-bottom:1px solid transparent; }
+  .nav a:hover, .nav a.active{ color: var(--gold-2); border-color: var(--gold-2); }
+  .back-link{ display:block; text-align:center; color: rgba(241,236,224,0.5); font-size:12.5px; margin-bottom:14px; text-decoration:none; }
+  .back-link:hover{ color: var(--gold-2); }
+  .hero{ text-align:center; color: var(--paper); margin-bottom: 30px; }
+  .hero .tag{ display:inline-block; background: rgba(201,162,39,0.2); color: var(--gold-2); font-size:11px; padding:3px 10px; border-radius:20px; margin-bottom:10px; }
+  .hero h1{ font-family:'Noto Serif KR', serif; font-size: 22px; font-weight:700; margin:0 0 8px; line-height:1.4; }
+  .hero p{ font-size: 13px; color: rgba(241,236,224,0.55); margin:0; }
+  .card{ background: var(--paper); border-radius: 14px; padding: 30px 26px; margin-bottom: 20px; box-shadow: 0 20px 45px -20px rgba(0,0,0,0.45); }
+  .card h2{ font-family:'Noto Serif KR', serif; font-size: 17px; color: var(--ink); margin: 0 0 12px; display:flex; align-items:center; gap:8px; }
+  .card h2 .num{ display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px; border-radius:50%; background: var(--gold); color:#241C05; font-size:13px; font-weight:700; flex-shrink:0; }
+  .card p{ font-size: 14px; line-height: 1.75; color: var(--text); margin: 0 0 12px; }
+  .card p:last-child{ margin-bottom:0; }
+  .card ul{ margin:0 0 12px; padding-left: 20px; }
+  .card li{ font-size: 14px; line-height:1.75; margin-bottom: 4px; }
+  .tip{ background: rgba(201,162,39,0.1); border-left: 3px solid var(--gold); border-radius: 6px; padding: 12px 14px; font-size: 13px; line-height:1.65; color: #4a3d10; margin-top: 12px; }
+  .footer-link{ text-align:center; margin-top: 30px; }
+  .footer-link a{ display:inline-block; background: linear-gradient(180deg, var(--gold-2), var(--gold)); color:#241C05; text-decoration:none; padding: 12px 26px; border-radius: 8px; font-family:'Noto Serif KR', serif; font-weight:700; font-size: 14px; }
+  .source-note{ text-align:center; color: rgba(241,236,224,0.35); font-size: 10.5px; margin-top: 26px; line-height:1.7; }
+  .source-note a{ color: rgba(241,236,224,0.5); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="nav">
+    <a href="index.html">홈 (계산기)</a>
+    <a href="guide.html">활용 가이드</a>
+    <a href="privacy.html">개인정보처리방침</a>
+  </div>
+  <a class="back-link" href="guide.html">← 콘텐츠 목록으로</a>
+
+  <div class="hero">
+    <div class="tag">통계 가이드</div>
+    <h1>2026년 나이대별 평균 월급,<br/>어떻게 봐야 할까</h1>
+    <p>숫자 하나로 "나는 잘 벌고 있나"를 판단하기 전에 알아두면 좋은 것들</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="num">1</span>평균과 중위값은 다르다</h2>
+    <p>
+      "평균 월급"이라는 말을 들으면 대부분 그 금액이 딱 중간 정도라고 생각하기 쉬워요. 하지만 소득 분포는 대체로
+      한쪽으로 길게 늘어진 모양을 띠어요. 소수의 고소득자가 전체 평균을 위로 끌어올리기 때문에, 실제로는
+      "평균보다 적게 버는 사람"이 "평균보다 많이 버는 사람"보다 더 많은 경우가 흔해요.
+    </p>
+    <p>
+      그래서 "내 위치"를 볼 때는 평균값 하나만 보기보다, 상위/하위 몇 퍼센트에 속하는지를 함께 보는 게 훨씬
+      현실적이에요. 이 계산기가 상위·하위 퍼센트를 같이 보여주는 이유도 여기에 있어요.
+    </p>
+  </div>
+
+  <div class="card">
+    <h2><span class="num">2</span>나이대별로 격차가 벌어지는 이유</h2>
+    <p>
+      20대에서 30대, 40대로 갈수록 평균 소득이 오르는 건 자연스러운 흐름이에요. 연차가 쌓이면서 직급이 오르고,
+      이직을 통해 몸값을 올리는 사람들이 늘어나기 때문이에요. 다만 50대 이후로는 증가세가 둔화되거나 오히려
+      꺾이는 경우도 있는데, 이건 임금피크제나 조기 은퇴, 자영업 전환 등 다양한 요인이 섞여 있어서예요.
+    </p>
+    <ul>
+      <li>20대: 신입~저연차 구간, 편차가 상대적으로 크지 않음</li>
+      <li>30~40대: 직급·이직에 따른 편차가 가장 크게 벌어지는 구간</li>
+      <li>50대 이후: 증가세 둔화, 고용 형태 다변화로 편차 확대</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2><span class="num">3</span>지역별 격차는 왜 생길까</h2>
+    <p>
+      지역별 평균 임금 차이는 대부분 산업 구조 차이에서 비롯돼요. 대기업 본사나 IT·금융업이 몰려있는 수도권은
+      평균 임금이 높게 형성되고, 제조업·농수산업 비중이 큰 지역은 상대적으로 낮게 나타나는 경향이 있어요.
+      다만 지역별로 생활비(특히 주거비)도 함께 차이 나기 때문에, 임금만 보고 "이 지역이 더 잘 산다"고
+      단정하기는 어려워요. 그래서 이 계산기는 임금뿐 아니라 생활비 추정치도 함께 지역별로 보정해서 보여드려요.
+    </p>
+  </div>
+
+  <div class="card">
+    <h2><span class="num">4</span>통계를 볼 때 꼭 주의할 점</h2>
+    <p>
+      나이·지역이 같아도 직군, 회사 규모, 근속연수, 학력, 자격증 등에 따라 실제 소득 차이는 훨씬 커요.
+      이 계산기가 보여주는 수치는 공개된 통계 흐름을 참고해 만든 <b>추정치</b>이지, 여러분의 실제 상황을
+      정확히 반영한 값이 아니에요.
+    </p>
+    <div class="tip">
+      💡 활용 팁: "평균보다 낮다"는 결과가 나왔다고 낙담하기보다는, 같은 나이·지역 내에서도 편차가 크다는 점을
+      기억하고 참고 자료 정도로만 받아들이는 걸 추천해요.
+    </div>
+  </div>
+
+  <div class="footer-link"><a href="index.html">계산기로 내 위치 확인하기 →</a></div>
+  <div class="source-note">© 2026 <a href="https://blog.naver.com/260823doit" target="_blank" rel="noopener">둥둥섬의동동</a>. All rights reserved.</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>가구원 수에 따라 생활비는 어떻게 달라질까 — 내 월급 명세서</title>
+<meta name="description" content="1인 가구부터 다인 가구까지, 생활비가 인원수만큼 정비례하지 않는 이유와 가구 형태별 절약 포인트를 정리했습니다." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700;900&family=Noto+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1B2A4A; --ink-2:#263A62; --paper:#F1ECE0; --gold:#C9A227; --gold-2:#E4C55C;
+    --stamp:#B03A2E; --stamp-2:#2E7D46; --text:#20242E; --muted:#6B7488; --line:rgba(27,42,74,0.14);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{ background: var(--ink); font-family:'Noto Sans KR', sans-serif; color: var(--text); display:flex; justify-content:center; padding: 40px 16px 90px; }
+  .wrap{ width:100%; max-width: 640px; }
+  .nav{ display:flex; justify-content:center; gap: 18px; margin-bottom: 26px; flex-wrap:wrap; }
+  .nav a{ color: rgba(241,236,224,0.6); font-size: 13px; text-decoration:none; border-bottom:1px solid transparent; }
+  .nav a:hover, .nav a.active{ color: var(--gold-2); border-color: var(--gold-2); }
+  .back-link{ display:block; text-align:center; color: rgba(241,236,224,0.5); font-size:12.5px; margin-bottom:14px; text-decoration:none; }
+  .back-link:hover{ color: var(--gold-2); }
+  .hero{ text-align:center; color: var(--paper); margin-bottom: 30px; }
+  .hero .tag{ display:inline-block; background: rgba(201,162,39,0.2); color: var(--gold-2); font-size:11px; padding:3px 10px; border-radius:20px; margin-bottom:10px; }
+  .hero h1{ font-family:'Noto Serif KR', serif; font-size: 22px; font-weight:700; margin:0 0 8px; line-height:1.4; }
+  .hero p{ font-size: 13px; color: rgba(241,236,224,0.55); margin:0; }
+  .card{ background: var(--paper); border-radius: 14px; padding: 30px 26px; margin-bottom: 20px; box-shadow: 0 20px 45px -20px rgba(0,0,0,0.45); }
+  .card h2{ font-family:'Noto Serif KR', serif; font-size: 17px; color: var(--ink); margin: 0 0 12px; display:flex; align-items:center; gap:8px; }
+  .card h2 .num{ display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px; border-radius:50%; background: var(--gold); color:#241C05; font-size:13px; font-weight:700; flex-shrink:0; }
+  .card p{ font-size: 14px; line-height: 1.75; color: var(--text); margin: 0 0 12px; }
+  .card p:last-child{ margin-bottom:0; }
+  .card ul{ margin:0 0 12px; padding-left: 20px; }
+  .card li{ font-size: 14px; line-height:1.75; margin-bottom: 4px; }
+  table.ratio{ width:100%; border-collapse:collapse; margin: 10px 0 14px; font-size:13.5px; }
+  table.ratio th, table.ratio td{ padding:8px 6px; border-bottom:1px solid var(--line); text-align:left; }
+  table.ratio th{ color:var(--muted); font-weight:600; font-size:12.5px; }
+  .tip{ background: rgba(201,162,39,0.1); border-left: 3px solid var(--gold); border-radius: 6px; padding: 12px 14px; font-size: 13px; line-height:1.65; color: #4a3d10; margin-top: 12px; }
+  .footer-link{ text-align:center; margin-top: 30px; }
+  .footer-link a{ display:inline-block; background: linear-gradient(180deg, var(--gold-2), var(--gold)); color:#241C05; text-decoration:none; padding: 12px 26px; border-radius: 8px; font-family:'Noto Serif KR', serif; font-weight:700; font-size: 14px; }
+  .source-note{ text-align:center; color: rgba(241,236,224,0.35); font-size: 10.5px; margin-top: 26px; line-height:1.7; }
+  .source-note a{ color: rgba(241,236,224,0.5); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="nav">
+    <a href="index.html">홈 (계산기)</a>
+    <a href="guide.html">활용 가이드</a>
+    <a href="privacy.html">개인정보처리방침</a>
+  </div>
+  <a class="back-link" href="guide.html">← 콘텐츠 목록으로</a>
+
+  <div class="hero">
+    <div class="tag">생활비 가이드</div>
+    <h1>가구원 수에 따라<br/>생활비는 어떻게 달라질까</h1>
+    <p>왜 4인 가구 생활비가 1인 가구의 4배가 아닌지 살펴봐요</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="num">1</span>생활비는 인원수에 정비례하지 않는다</h2>
+    <p>
+      가족이 두 명이 되면 생활비도 딱 두 배가 될 것 같지만, 실제로는 그렇지 않아요. 월세·관리비·인터넷 요금
+      같은 항목은 사람이 늘어나도 거의 그대로이고, 식비나 생필품 같은 항목만 어느 정도 늘어나기 때문이에요.
+      이런 현상을 흔히 "규모의 경제"라고 불러요 — 함께 사는 사람이 늘어날수록 1인당 부담하는 고정비용이
+      줄어드는 효과예요.
+    </p>
+  </div>
+
+  <div class="card">
+    <h2><span class="num">2</span>가구원 수별 생활비 배율 (이 계산기 기준)</h2>
+    <p>1인 가구를 1.00배 기준으로 뒀을 때, 이 계산기가 적용하는 배율은 이래요.</p>
+    <table class="ratio">
+      <tr><th>가구원 수</th><th>배율</th><th>1인당 부담</th></tr>
+      <tr><td>1인</td><td>1.00배</td><td>100%</td></tr>
+      <tr><td>2인</td><td>1.62배</td><td>81%</td></tr>
+      <tr><td>3인</td><td>2.05배</td><td>68%</td></tr>
+      <tr><td>4인</td><td>2.35배</td><td>59%</td></tr>
+      <tr><td>5인</td><td>2.60배</td><td>52%</td></tr>
+    </table>
+    <p>
+      "1인당 부담" 열을 보면, 가구원이 늘어날수록 1인당 실제로 부담하는 생활비 비중이 줄어드는 걸 확인할 수
+      있어요. 5인 가구는 1인 가구 대비 총액은 2.6배지만, 1인당으로 나누면 오히려 52% 수준으로 떨어져요.
+    </p>
+  </div>
+
+  <div class="card">
+    <h2><span class="num">3</span>1인 가구 vs 다인 가구, 구조가 다르다</h2>
+    <p>
+      1인 가구는 고정비(월세, 관리비, 각종 요금)의 비중이 상대적으로 커요. 혼자 살아도 인터넷은 깔아야 하고,
+      공과금 기본요금은 나오기 때문이에요. 반면 다인 가구는 고정비 비중은 낮아지지만, 식비·교육비·의료비처럼
+      인원수에 비례해서 늘어나는 항목의 비중이 커지는 구조예요.
+    </p>
+    <ul>
+      <li><b>1인 가구 절약 포인트</b> — 고정비 점검(요금제, 구독 서비스 통합), 소량 구매로 인한 단가 손해 줄이기</li>
+      <li><b>다인 가구 절약 포인트</b> — 대량 구매·공동 구매 활용, 자녀 교육비·의료비 계획적으로 관리</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2><span class="num">4</span>이 계산기에서 가구원 수를 어떻게 반영하나요</h2>
+    <p>
+      ① 월급 비교 탭에서 가구원 수를 선택하면, 위 배율이 자동으로 생활비 계산에 반영돼요. 예를 들어 1인 기준
+      추정 생활비가 250만원이라면, 4인 가구는 250 × 2.35 = 약 587만원으로 계산돼요. 이 값이 그대로
+      "예상 저축 여력" 계산에도 반영되니, 가구 형태가 바뀌었다면 이 값부터 다시 확인해보세요.
+    </p>
+    <div class="tip">
+      💡 참고: 입력하신 월급란에는 본인 소득만 들어가요. 맞벌이 가구라면 실제 가구 소득은 이 계산기 결과보다
+      클 가능성이 높다는 점을 감안해서 참고해주세요.
+    </div>
+  </div>
+
+  <div class="footer-link"><a href="index.html">우리 가구 생활비 확인하기 →</a></div>
+  <div class="source-note">© 2026 <a href="https://blog.naver.com/260823doit" target="_blank" rel="noopener">둥둥섬의동동</a>. All rights reserved.</div>
+</div>
+</body>
+</html>

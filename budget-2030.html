@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>2030세대 한 달 지출, 어떤 비중이 적당할까 — 내 월급 명세서</title>
+<meta name="description" content="고정지출·생활비·저축·여가·예비비 카테고리별로 참고할 만한 지출 비중과 과소비 신호를 정리했습니다." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700;900&family=Noto+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1B2A4A; --ink-2:#263A62; --paper:#F1ECE0; --gold:#C9A227; --gold-2:#E4C55C;
+    --stamp:#B03A2E; --stamp-2:#2E7D46; --text:#20242E; --muted:#6B7488; --line:rgba(27,42,74,0.14);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{ background: var(--ink); font-family:'Noto Sans KR', sans-serif; color: var(--text); display:flex; justify-content:center; padding: 40px 16px 90px; }
+  .wrap{ width:100%; max-width: 640px; }
+  .nav{ display:flex; justify-content:center; gap: 18px; margin-bottom: 26px; flex-wrap:wrap; }
+  .nav a{ color: rgba(241,236,224,0.6); font-size: 13px; text-decoration:none; border-bottom:1px solid transparent; }
+  .nav a:hover, .nav a.active{ color: var(--gold-2); border-color: var(--gold-2); }
+  .back-link{ display:block; text-align:center; color: rgba(241,236,224,0.5); font-size:12.5px; margin-bottom:14px; text-decoration:none; }
+  .back-link:hover{ color: var(--gold-2); }
+  .hero{ text-align:center; color: var(--paper); margin-bottom: 30px; }
+  .hero .tag{ display:inline-block; background: rgba(201,162,39,0.2); color: var(--gold-2); font-size:11px; padding:3px 10px; border-radius:20px; margin-bottom:10px; }
+  .hero h1{ font-family:'Noto Serif KR', serif; font-size: 22px; font-weight:700; margin:0 0 8px; line-height:1.4; }
+  .hero p{ font-size: 13px; color: rgba(241,236,224,0.55); margin:0; }
+  .card{ background: var(--paper); border-radius: 14px; padding: 30px 26px; margin-bottom: 20px; box-shadow: 0 20px 45px -20px rgba(0,0,0,0.45); }
+  .card h2{ font-family:'Noto Serif KR', serif; font-size: 17px; color: var(--ink); margin: 0 0 12px; display:flex; align-items:center; gap:8px; }
+  .card h2 .num{ display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px; border-radius:50%; background: var(--gold); color:#241C05; font-size:13px; font-weight:700; flex-shrink:0; }
+  .card p{ font-size: 14px; line-height: 1.75; color: var(--text); margin: 0 0 12px; }
+  .card p:last-child{ margin-bottom:0; }
+  .card ul{ margin:0 0 12px; padding-left: 20px; }
+  .card li{ font-size: 14px; line-height:1.75; margin-bottom: 4px; }
+  table.ratio{ width:100%; border-collapse:collapse; margin: 10px 0 14px; font-size:13.5px; }
+  table.ratio th, table.ratio td{ padding:8px 6px; border-bottom:1px solid var(--line); text-align:left; }
+  table.ratio th{ color:var(--muted); font-weight:600; font-size:12.5px; }
+  .tip{ background: rgba(201,162,39,0.1); border-left: 3px solid var(--gold); border-radius: 6px; padding: 12px 14px; font-size: 13px; line-height:1.65; color: #4a3d10; margin-top: 12px; }
+  .footer-link{ text-align:center; margin-top: 30px; }
+  .footer-link a{ display:inline-block; background: linear-gradient(180deg, var(--gold-2), var(--gold)); color:#241C05; text-decoration:none; padding: 12px 26px; border-radius: 8px; font-family:'Noto Serif KR', serif; font-weight:700; font-size: 14px; }
+  .source-note{ text-align:center; color: rgba(241,236,224,0.35); font-size: 10.5px; margin-top: 26px; line-height:1.7; }
+  .source-note a{ color: rgba(241,236,224,0.5); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="nav">
+    <a href="index.html">홈 (계산기)</a>
+    <a href="guide.html">활용 가이드</a>
+    <a href="privacy.html">개인정보처리방침</a>
+  </div>
+  <a class="back-link" href="guide.html">← 콘텐츠 목록으로</a>
+
+  <div class="hero">
+    <div class="tag">지출 가이드</div>
+    <h1>2030세대 한 달 지출,<br/>어떤 비중이 적당할까</h1>
+    <p>카테고리별 참고 비중과 과소비 신호를 체크해보세요</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="num">1</span>왜 지출을 카테고리로 나눠야 할까</h2>
+    <p>
+      "이번 달에 얼마 썼지?"라는 총액만 보면 어디서 새는지 알 수 없어요. 지출을 성격이 비슷한 항목끼리
+      묶어보면, 줄일 수 있는 부분과 줄이기 어려운 부분이 명확하게 구분돼요. 이 사이트의 지출 계산기 탭도
+      이런 이유로 고정지출·생활비·저축투자·여가문화·예비비 다섯 가지로 나눠서 입력하게 만들었어요.
+    </p>
+  </div>
+
+  <div class="card">
+    <h2><span class="num">2</span>참고할 만한 지출 비중</h2>
+    <p>
+      아래 비중은 특정 기관의 확정된 기준이 아니라, 재무 상담에서 흔히 참고되는 일반적인 가이드라인이에요.
+      소득 수준, 거주 지역, 부양가족 여부에 따라 크게 달라질 수 있으니 절대적인 정답으로 받아들이지는 마세요.
+    </p>
+    <table class="ratio">
+      <tr><th>카테고리</th><th>참고 비중</th></tr>
+      <tr><td>고정지출 (주거·통신·보험 등)</td><td>25~35%</td></tr>
+      <tr><td>생활비 (식비·교통 등)</td><td>20~30%</td></tr>
+      <tr><td>저축·투자</td><td>20% 이상</td></tr>
+      <tr><td>여가·문화</td><td>10~15%</td></tr>
+      <tr><td>예비비·경조사</td><td>5~10%</td></tr>
+    </table>
+    <div class="tip">
+      💡 활용 팁: 지출 계산기 결과의 도넛 차트가 이 비중과 많이 다르다면, 어느 카테고리가 유독 큰지부터
+      확인해보세요. 대부분은 고정지출 비중이 너무 커서 생기는 경우가 많아요.
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="num">3</span>과소비 신호 체크리스트</h2>
+    <ul>
+      <li>고정지출이 월급의 40%를 넘는다</li>
+      <li>저축·투자 비중이 여가·문화 비중보다 작다</li>
+      <li>매달 카드값이 얼마 나올지 예측이 안 된다</li>
+      <li>예비비·경조사 지출이 매달 큰 편인데 미리 대비가 안 되어 있다</li>
+      <li>월급 대비 남는 돈이 계속 마이너스로 나온다</li>
+    </ul>
+    <p>이 중 두 개 이상 해당한다면, 지출 구조를 한번 점검해볼 시점이에요.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="num">4</span>고정지출부터 손대는 게 효율적인 이유</h2>
+    <p>
+      흔히 절약이라고 하면 커피값이나 외식비부터 줄이려고 하는데, 사실 가장 효과가 큰 건 고정지출을
+      점검하는 거예요. 통신비 요금제, 안 쓰는 구독 서비스, 보험 중복 가입 여부 등은 한 번만 손보면
+      매달 자동으로 절약 효과가 지속돼요. 반면 생활비는 매달 의지력으로 줄여야 해서 지속하기가 더 어려워요.
+    </p>
+  </div>
+
+  <div class="footer-link"><a href="index.html">지출 계산기로 직접 확인하기 →</a></div>
+  <div class="source-note">© 2026 <a href="https://blog.naver.com/260823doit" target="_blank" rel="noopener">둥둥섬의동동</a>. All rights reserved.</div>
+</div>
+</body>
+</html>
