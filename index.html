@@ -189,6 +189,7 @@
     flex-shrink:0; text-decoration:none; background: var(--ink); color: var(--gold-2);
     font-size: 12px; font-weight:700; padding: 9px 14px; border-radius: 7px; white-space:nowrap;
   }
+  .cta a.cta-btn.disabled{ opacity:0.45; pointer-events:none; cursor:default; }
 
   .source-note{ text-align:center; color: rgba(241,236,224,0.35); font-size: 10.5px; margin-top: 20px; line-height:1.7; }
 
@@ -228,6 +229,69 @@
   .cat-total-row .k{ color: var(--muted); font-family:'Noto Sans KR', sans-serif; font-size:12.5px; display:flex; align-items:center; gap:6px; }
   .cat-total-row .k .dot{ width:8px; height:8px; border-radius:50%; display:inline-block; }
   .cat-total-row .v{ color: var(--text); font-weight:600; }
+
+  /* SLIDER */
+  .field input[type=range]{ padding:0; border:none; background:transparent; }
+  .slider-row{ display:flex; align-items:center; gap:10px; margin-top:8px; }
+  .slider-row input[type=range]{
+    flex:1; -webkit-appearance:none; appearance:none; height:4px; border-radius:3px;
+    background: rgba(241,236,224,0.18); outline:none; cursor:pointer;
+  }
+  .slider-row input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none; width:17px; height:17px; border-radius:50%;
+    background: var(--gold-2); border: 2px solid var(--ink); cursor:pointer;
+  }
+  .slider-row input[type=range]::-moz-range-thumb{
+    width:17px; height:17px; border-radius:50%; background: var(--gold-2); border: 2px solid var(--ink); cursor:pointer;
+  }
+  .slider-live{ font-size:9.5px; color: rgba(241,236,224,0.35); margin-top:4px; letter-spacing:0.02em; }
+
+  /* BADGE */
+  .badge-row{ display:flex; justify-content:center; margin: 4px 0 14px; }
+  .badge-chip{
+    display:inline-flex; align-items:center; gap:6px; background: rgba(27,42,74,0.06);
+    border: 1px solid rgba(27,42,74,0.15); border-radius: 20px; padding: 7px 16px;
+    font-family:'Noto Serif KR', serif; font-weight:700; font-size: 13.5px; color: var(--ink);
+  }
+  .comment-box{
+    background: rgba(27,42,74,0.045); border-left: 3px solid var(--gold); border-radius: 6px;
+    padding: 11px 13px; font-size: 12.5px; line-height:1.6; color: var(--text); margin: 4px 0 16px;
+  }
+
+  /* REGION HEATMAP */
+  .heat-list{ display:flex; flex-direction:column; gap:5px; }
+  .heat-row{ display:flex; align-items:center; gap:8px; font-size:11.5px; }
+  .heat-row .hname{ width:32px; flex-shrink:0; color: var(--muted); font-family:'Noto Sans KR',sans-serif; }
+  .heat-row .hbar-wrap{ flex:1; height:14px; background: rgba(27,42,74,0.06); border-radius:4px; overflow:hidden; }
+  .heat-row .hbar{ height:100%; border-radius:4px; background: rgba(27,42,74,0.35); }
+  .heat-row.me .hname{ color: var(--ink); font-weight:700; }
+  .heat-row.me .hbar{ background: linear-gradient(90deg, var(--gold-2), var(--gold)); }
+  .heat-row .hval{ width:56px; flex-shrink:0; text-align:right; font-family:'IBM Plex Mono',monospace; color:var(--muted); font-size:10.5px; }
+
+  /* SHARE BUTTON */
+  .share-btn{
+    width:100%; margin-top: 14px; background: transparent; border: 1.5px dashed rgba(27,42,74,0.3);
+    color: var(--ink); border-radius: 8px; padding: 11px; font-family:'Noto Sans KR', sans-serif;
+    font-weight:700; font-size: 13px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;
+  }
+  .share-btn:hover{ border-color: var(--gold); background: rgba(201,162,39,0.06); }
+  .conclusion-link{
+    display:block; text-align:center; margin-top:14px; padding:10px; border-radius:8px;
+    background: var(--ink); color: var(--gold-2); font-family:'Noto Serif KR',serif; font-weight:700;
+    font-size:13px; text-decoration:none; cursor:pointer;
+  }
+
+  /* TAB 4: 종합 결론 */
+  .concl-badge{ text-align:center; margin: 6px 0 18px; }
+  .concl-badge .emoji{ font-size: 38px; display:block; margin-bottom:6px; }
+  .concl-badge .title{ font-family:'Noto Serif KR', serif; font-weight:900; font-size: 20px; color: var(--ink); }
+  .concl-section{ margin-bottom: 16px; }
+  .concl-section h3{ font-family:'Noto Serif KR', serif; font-size: 13.5px; color: var(--gold-2); margin:0 0 6px; background:var(--ink); display:inline-block; padding:3px 10px; border-radius:5px; }
+  .concl-section p{ font-size: 13px; line-height:1.7; color: var(--text); margin: 6px 0 0; }
+  .concl-empty{ font-size:12px; color: var(--muted); font-style:italic; }
+  .concl-score-wrap{ margin: 10px 0 20px; }
+  .concl-score-bar{ height:12px; border-radius:7px; background: rgba(27,42,74,0.08); overflow:hidden; margin-top:6px; }
+  .concl-score-fill{ height:100%; background: linear-gradient(90deg, var(--gold-2), var(--gold)); transition: width .6s ease; }
 </style>
 </head>
 <body>
@@ -239,9 +303,10 @@
   </div>
 
   <div class="tabs">
-    <button class="tab-btn active" data-tab="1" onclick="switchTab(1)">① 월급 비교</button>
-    <button class="tab-btn" data-tab="2" onclick="switchTab(2)">② 저축 시뮬레이션</button>
-    <button class="tab-btn" data-tab="3" onclick="switchTab(3)">③ 지출 계산기</button>
+    <button class="tab-btn active" data-tab="1" onclick="switchTab(1)">① 월급</button>
+    <button class="tab-btn" data-tab="2" onclick="switchTab(2)">② 저축</button>
+    <button class="tab-btn" data-tab="3" onclick="switchTab(3)">③ 지출</button>
+    <button class="tab-btn" data-tab="4" onclick="switchTab(4)">④ 결론</button>
   </div>
 
   <!-- TAB 1 -->
@@ -258,7 +323,7 @@
 
       <div class="field">
         <label>나이</label>
-        <input type="number" id="age" placeholder="예: 32" min="15" max="99" />
+        <input type="number" id="age" placeholder="예: 32" min="15" max="99" value="32" />
         <div class="stepper"><span onclick="stepValue('age',1,15,99)">▲</span><span onclick="stepValue('age',-1,15,99)">▼</span></div>
       </div>
 
@@ -274,12 +339,12 @@
 
       <div class="field">
         <label>월 실수령 급여</label>
-        <input type="number" id="salary" placeholder="예: 320" data-unit="true" />
+        <input type="number" id="salary" placeholder="예: 320" data-unit="true" value="320" />
         <div class="unit">만원</div>
-        <div class="stepper"><span onclick="stepValue('salary',1,0)">▲</span><span onclick="stepValue('salary',-1,0)">▼</span></div>
+        <div class="stepper"><span onclick="stepValue('salary',10,0)">▲</span><span onclick="stepValue('salary',-10,0)">▼</span></div>
       </div>
 
-      <button class="submit-btn" onclick="calculate()">명세서 발급하기</button>
+      <button class="submit-btn" onclick="calculate(true)">명세서 발급하기</button>
     </div>
 
     <div class="statement" id="statement">
@@ -291,6 +356,9 @@
       <div class="st-inner">
       <div class="stamp" id="stampText">상위<br/>-</div>
       <div class="st-head"><div class="t">비교 명세서</div><div class="d" id="stDate"></div></div>
+
+      <div class="badge-row"><div class="badge-chip" id="badge1">🏅 -</div></div>
+      <div class="comment-box" id="comment1">-</div>
 
       <div class="st-row"><div class="k">입력한 월급</div><div class="v" id="rMySalary">-</div></div>
       <div class="st-row"><div class="k">내 나이대·지역 평균 월급</div><div class="v" id="rAvgSalary">-</div></div>
@@ -312,10 +380,18 @@
         <canvas id="ageChart" height="150"></canvas>
       </div>
 
+      <div class="chart-box">
+        <div class="chart-title">전국 17개 지역 임금 수준 비교 (내 나이대 기준)</div>
+        <div class="heat-list" id="regionHeat"></div>
+      </div>
+
       <div class="cta" id="ctaBox">
         <div class="cta-text" id="ctaText"><b>-</b>-</div>
         <a href="#" class="cta-btn" id="ctaBtn" target="_blank" rel="noopener">바로가기</a>
       </div>
+
+      <button class="share-btn" onclick="shareImage('statement','my-salary-report')">📸 이미지로 저장·공유</button>
+      <a class="conclusion-link" onclick="switchTab(4)">📊 종합 결론 보러가기</a>
 
       <div class="footnote" id="footnote1">
         ※ 본 결과는 <b>2024년 통계 흐름을 기준으로, 이후 임금상승률(약 연 2.3%)과 물가상승률(약 연 2%)을 반영해 2026년 시점에 맞게 보정한 추정치</b>입니다. 지역×나이대가 교차된 공식 통계는 정부에서 별도로 발표하지 않아 완전한 실측치가 아니며, 실제 개인·지역별 수치와 차이가 있을 수 있으니 참고용으로만 활용해 주세요. 가구원 수가 늘어도 생활비가 인원수만큼 정비례로 증가하지 않는 '규모의 경제'를 반영해 계산했습니다.
@@ -337,9 +413,9 @@
 
       <div class="field">
         <label>월 저축액</label>
-        <input type="number" id="monthlySaving" placeholder="예: 50" data-unit="true" />
+        <input type="number" id="monthlySaving" placeholder="예: 50" data-unit="true" value="50" />
         <div class="unit">만원</div>
-        <div class="stepper"><span onclick="stepValue('monthlySaving',1,0)">▲</span><span onclick="stepValue('monthlySaving',-1,0)">▼</span></div>
+        <div class="stepper"><span onclick="stepValue('monthlySaving',5,0)">▲</span><span onclick="stepValue('monthlySaving',-5,0)">▼</span></div>
       </div>
 
       <div class="field">
@@ -368,7 +444,7 @@
         <div class="stepper"><span onclick="stepValue('goalAmount',100,0)">▲</span><span onclick="stepValue('goalAmount',-100,0)">▼</span></div>
       </div>
 
-      <button class="submit-btn" onclick="calculateSavings()">저축 계획 계산하기</button>
+      <button class="submit-btn" onclick="calculateSavings(true)">저축 계획 계산하기</button>
     </div>
 
     <div class="statement" id="statement2">
@@ -380,6 +456,9 @@
       <div class="st-inner">
       <div class="stamp green" id="stampText2">예상<br/>수익</div>
       <div class="st-head"><div class="t">저축 시뮬레이션 결과</div><div class="d" id="stDate2"></div></div>
+
+      <div class="badge-row"><div class="badge-chip" id="badge2">🏅 -</div></div>
+      <div class="comment-box" id="comment2">-</div>
 
       <div class="st-row"><div class="k">총 납입 원금</div><div class="v" id="rPrincipal">-</div></div>
       <div class="st-row"><div class="k">예상 이자·수익</div><div class="v pos" id="rInterest">-</div></div>
@@ -395,9 +474,12 @@
       </div>
 
       <div class="cta">
-        <div class="cta-text"><b>정기적금/예금 비교해보기</b>더 높은 금리 상품을 찾아보세요</div>
-        <a href="#" class="cta-btn" target="_blank" rel="noopener">바로가기</a>
+        <div class="cta-text"><b>정기적금/예금 비교 연결 예정</b>준비 중입니다</div>
+        <a href="javascript:void(0)" class="cta-btn disabled">준비 중</a>
       </div>
+
+      <button class="share-btn" onclick="shareImage('statement2','my-savings-plan')">📸 이미지로 저장·공유</button>
+      <a class="conclusion-link" onclick="switchTab(4)">📊 종합 결론 보러가기</a>
 
       <div class="footnote">
         ※ 월복리 기준의 단순 추정치이며, 세금(이자소득세)·수수료는 반영되지 않았습니다. 실제 상품 조건에 따라 결과가 달라질 수 있습니다.
@@ -419,14 +501,14 @@
 
       <div class="field">
         <label>월급 (실수령액)</label>
-        <input type="number" id="expSalary" placeholder="예: 320" data-unit="true" />
+        <input type="number" id="expSalary" placeholder="예: 320" data-unit="true" value="320" />
         <div class="unit">만원</div>
-        <div class="stepper"><span onclick="stepValue('expSalary',1,0)">▲</span><span onclick="stepValue('expSalary',-1,0)">▼</span></div>
+        <div class="stepper"><span onclick="stepValue('expSalary',10,0)">▲</span><span onclick="stepValue('expSalary',-10,0)">▼</span></div>
       </div>
 
       <div id="expenseCategories"></div>
 
-      <button class="submit-btn" onclick="calculateExpense()">지출 계산하기</button>
+      <button class="submit-btn" onclick="calculateExpense(true)">지출 계산하기</button>
     </div>
 
     <div class="statement" id="statement3">
@@ -438,6 +520,9 @@
       <div class="st-inner">
       <div class="stamp" id="stampText3">지출<br/>-</div>
       <div class="st-head"><div class="t">이번 달 지출 명세서</div><div class="d" id="stDate3"></div></div>
+
+      <div class="badge-row"><div class="badge-chip" id="badge3">🏅 -</div></div>
+      <div class="comment-box" id="comment3">-</div>
 
       <div id="catTotalsBox"></div>
 
@@ -451,12 +536,47 @@
       </div>
 
       <div class="cta">
-        <div class="cta-text"><b>지출 항목 더 다듬고 싶다면</b>가계부 관리 팁을 확인해보세요</div>
-        <a href="https://blog.naver.com/260823doit" class="cta-btn" target="_blank" rel="noopener">바로가기</a>
+        <div class="cta-text"><b>지출 항목 더 다듬고 싶다면</b>가계부 관리 팁 연결 예정 (준비 중)</div>
+        <a href="javascript:void(0)" class="cta-btn disabled">준비 중</a>
       </div>
+
+      <button class="share-btn" onclick="shareImage('statement3','my-expense-report')">📸 이미지로 저장·공유</button>
+      <a class="conclusion-link" onclick="switchTab(4)">📊 종합 결론 보러가기</a>
 
       <div class="footnote">
         ※ 입력하신 항목·금액은 저장되지 않으며 화면에서만 계산됩니다. 실제 지출 습관에 맞게 항목명은 자유롭게 바꿔서 사용하세요.
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 4 -->
+  <div class="tab-panel" id="panel4">
+    <div class="statement show" id="statement4">
+      <div class="watermark-layer">
+        <span>둥둥섬의동동</span><span>둥둥섬의동동</span><span>둥둥섬의동동</span>
+        <span>둥둥섬의동동</span><span>둥둥섬의동동</span><span>둥둥섬의동동</span>
+        <span>둥둥섬의동동</span><span>둥둥섬의동동</span><span>둥둥섬의동동</span>
+      </div>
+      <div class="st-inner">
+      <div class="st-head"><div class="t">종합 재무 리포트</div><div class="d" id="stDate4"></div></div>
+
+      <div class="concl-badge">
+        <span class="emoji" id="conclEmoji">🧭</span>
+        <div class="title" id="conclTitle">아직 데이터가 부족해요</div>
+      </div>
+
+      <div class="concl-score-wrap">
+        <div class="st-row"><div class="k">종합 재무 점수</div><div class="v" id="conclScore">-</div></div>
+        <div class="concl-score-bar"><div class="concl-score-fill" id="conclScoreFill" style="width:0%"></div></div>
+      </div>
+
+      <div id="conclBody"></div>
+
+      <button class="share-btn" onclick="shareImage('statement4','my-financial-report')">📸 이미지로 저장·공유</button>
+
+      <div class="footnote">
+        ※ 이 리포트는 ①②③ 탭에서 계산하신 값을 종합해 자동으로 만들어져요. 값을 바꾸면 여기도 함께 업데이트돼요.
       </div>
       </div>
     </div>
@@ -474,6 +594,7 @@
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
 /* ---------------- 공통 데이터 (통계 기반 추정치) ---------------- */
 const DATA_YEAR = 2026;
@@ -564,27 +685,69 @@ function percentileOf(salary, mean){
 
 let chartInstance = null;
 let lastSavings = null;
+let lastResult1 = null, lastResult2 = null, lastResult3 = null;
 
 function switchTab(n){
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab == n));
   document.getElementById('panel1').classList.toggle('active', n===1);
   document.getElementById('panel2').classList.toggle('active', n===2);
   document.getElementById('panel3').classList.toggle('active', n===3);
+  document.getElementById('panel4').classList.toggle('active', n===4);
   if(n===2 && lastSavings !== null){
     const field = document.getElementById('monthlySaving');
-    if(!field.value){ field.value = Math.max(0, Math.round(lastSavings)); }
+    field.value = Math.max(0, Math.min(300, Math.round(lastSavings)));
   }
+  if(n===4){ renderConclusion(); }
 }
 
-function calculate(){
+/* ---------------- 슬라이더 실시간 라벨 ---------------- */
+
+/* ---------------- 배지 · 코멘트 ---------------- */
+function getIncomeBadge(topPct, savings){
+  if(savings >= 0 && topPct <= 30) return {emoji:'👑', title:'완벽한 밸런스형'};
+  if(savings >= 0) return {emoji:'🐿️', title:'알뜰 저축러'};
+  if(topPct <= 30) return {emoji:'💳', title:'고소득 플렉스형'};
+  return {emoji:'🔍', title:'지출 점검 필요형'};
+}
+function getSavingsBadge(returnPct){
+  if(returnPct >= 30) return {emoji:'🪄', title:'복리의 마법사'};
+  if(returnPct >= 15) return {emoji:'📈', title:'꾸준함의 승리'};
+  return {emoji:'🌱', title:'첫 걸음형'};
+}
+function getExpenseBadge(usedPct){
+  if(usedPct < 50) return {emoji:'🐣', title:'짠테크 고수'};
+  if(usedPct < 80) return {emoji:'⚖️', title:'밸런스형'};
+  if(usedPct <= 100) return {emoji:'💳', title:'플렉스형'};
+  return {emoji:'🚨', title:'적자 탈출 필요형'};
+}
+
+/* ---------------- 이미지 저장·공유 ---------------- */
+function shareImage(elId, filename){
+  const el = document.getElementById(elId);
+  if(!window.html2canvas){ alert('이미지 생성 기능을 불러오는 중이에요. 잠시 후 다시 시도해주세요.'); return; }
+  html2canvas(el, { backgroundColor:'#F1ECE0', scale:2, useCORS:true }).then(canvas => {
+    canvas.toBlob(blob => {
+      if(!blob) return;
+      const file = new File([blob], filename+'.png', {type:'image/png'});
+      if(navigator.canShare && navigator.canShare({files:[file]})){
+        navigator.share({files:[file], title:'내 월급 명세서'}).catch(()=>{ downloadBlob(blob, filename); });
+      } else {
+        downloadBlob(blob, filename);
+      }
+    });
+  });
+}
+function downloadBlob(blob, filename){
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename + '.png'; a.click();
+  setTimeout(()=>URL.revokeObjectURL(url), 3000);
+}
+
+function calculate(userTriggered){
   const age = parseInt(document.getElementById('age').value, 10);
   const salary = parseFloat(document.getElementById('salary').value);
-  const regionIdx = parseInt(regionSelect.value, 10);
-
-  if(!age || age < 15 || age > 99 || !salary || salary <= 0 || isNaN(regionIdx)){
-    alert('나이와 월급을 정확히 입력해 주세요.');
-    return;
-  }
+  const regionIdx = parseInt(regionSelect.value, 10) || 0;
 
   const region = REGIONS[regionIdx];
   const bracket = findBracket(age);
@@ -601,6 +764,8 @@ function calculate(){
 
   const pct = percentileOf(salary, avgWage);
   const topPct = 100 - pct;
+
+  lastResult1 = { age, salary, regionName: region.name, bracketLabel: bracket.label, householdSize, avgWage, avgLiving, savings, topPct };
 
   document.getElementById('rMySalary').textContent = fmt(salary);
   document.getElementById('rAvgSalary').textContent = fmt(avgWage) + ' (' + bracket.label + ' · ' + region.name + ')';
@@ -621,24 +786,31 @@ function calculate(){
   const stampEl = document.getElementById('stampText');
   stampEl.innerHTML = '상위<br/>' + topPct.toFixed(0) + '%';
 
+  const badge = getIncomeBadge(topPct, savings);
+  document.getElementById('badge1').innerHTML = badge.emoji + ' ' + badge.title;
+  document.getElementById('comment1').textContent =
+    bracket.label + ' · ' + region.name + ' 거주자 중 상위 ' + topPct.toFixed(0) + '%의 소득이에요. ' +
+    '추정 생활비를 제하면 매달 ' + (savings>=0?'+':'') + Math.round(savings) + '만원의 여력이 ' + (savings>=0?'생겨요.':'부족해요.');
+
   document.getElementById('stDate').textContent = new Date().toLocaleDateString('ko-KR', {year:'numeric', month:'2-digit', day:'2-digit'}) + ' (' + BASE_YEAR + '년 통계 + 상승률 반영 ' + DATA_YEAR + '년 추정)';
 
   // CTA 분기
   const ctaText = document.getElementById('ctaText');
   const ctaBtn = document.getElementById('ctaBtn');
   if(savings >= 0){
-    ctaText.innerHTML = '<b>저축 여력이 있으시네요</b>더 높은 금리의 예적금 상품을 비교해보세요';
-    ctaBtn.textContent = '금리 비교하기';
-    ctaBtn.href = '#'; // TODO: 실제 제휴 링크로 교체
+    ctaText.innerHTML = '<b>저축 여력이 있으시네요</b>더 높은 금리의 예적금 상품 연결 예정 (준비 중)';
+    ctaBtn.textContent = '준비 중';
+    ctaBtn.href = 'javascript:void(0)';
+    ctaBtn.classList.add('disabled');
   } else {
-    ctaText.innerHTML = '<b>지출 구조를 점검해볼 시점</b>가계부·재테크 팁 콘텐츠를 확인해보세요';
-    ctaBtn.textContent = '팁 보러가기';
-    ctaBtn.href = 'https://blog.naver.com/260823doit';
+    ctaText.innerHTML = '<b>지출 구조를 점검해볼 시점</b>가계부·재테크 팁 콘텐츠 연결 예정 (준비 중)';
+    ctaBtn.textContent = '준비 중';
+    ctaBtn.href = 'javascript:void(0)';
+    ctaBtn.classList.add('disabled');
   }
 
   const statementEl = document.getElementById('statement');
   statementEl.classList.remove('show'); void statementEl.offsetWidth; statementEl.classList.add('show');
-
   const labels = AGE_BRACKETS.map(b => b.label);
   const data = AGE_BRACKETS.map(b => Math.round(b.wage * region.wageIdx));
   const colors = AGE_BRACKETS.map(b => b.key === bracket.key ? '#C9A227' : 'rgba(27,42,74,0.35)');
@@ -658,21 +830,34 @@ function calculate(){
     }
   });
 
-  statementEl.scrollIntoView({ behavior:'smooth', block:'nearest' });
+  // 지역 히트맵
+  const heatData = REGIONS.map(r => ({ name:r.name, wage: Math.round(bracket.wage * r.wageIdx) }))
+    .sort((a,b) => b.wage - a.wage);
+  const maxWage = heatData[0].wage;
+  const heatEl = document.getElementById('regionHeat');
+  heatEl.innerHTML = heatData.map(h => {
+    const isMe = h.name === region.name;
+    const w = Math.max(4, Math.round(h.wage / maxWage * 100));
+    return '<div class="heat-row'+(isMe?' me':'')+'"><div class="hname">'+h.name+'</div><div class="hbar-wrap"><div class="hbar" style="width:'+w+'%"></div></div><div class="hval">'+h.wage+'만원</div></div>';
+  }).join('');
+
+  if(userTriggered) statementEl.scrollIntoView({ behavior:'smooth', block:'nearest' });
 }
 
-function setRate(v){ document.getElementById('annualRate').value = v; }
+function setRate(v){
+  document.getElementById('annualRate').value = v;
+}
 
 let savingChartInstance = null;
 
-function calculateSavings(){
-  const monthly = parseFloat(document.getElementById('monthlySaving').value);
-  const rate = parseFloat(document.getElementById('annualRate').value);
-  const years = parseFloat(document.getElementById('years').value);
+function calculateSavings(userTriggered){
+  const monthly = parseFloat(document.getElementById('monthlySaving').value) || 0;
+  const rate = parseFloat(document.getElementById('annualRate').value) || 0;
+  const years = parseFloat(document.getElementById('years').value) || 1;
   const goal = parseFloat(document.getElementById('goalAmount').value);
 
-  if(!monthly || monthly <= 0 || !years || years <= 0 || isNaN(rate) || rate < 0){
-    alert('월 저축액과 기간을 정확히 입력해 주세요.');
+  if(monthly <= 0){
+    document.getElementById('statement2').classList.remove('show');
     return;
   }
 
@@ -696,7 +881,11 @@ function calculateSavings(){
   const returnPct = totalPrincipal > 0 ? (totalInterest/totalPrincipal*100) : 0;
   stampEl.innerHTML = '수익률<br/>+' + returnPct.toFixed(1) + '%';
 
+  const badge = getSavingsBadge(returnPct);
+  document.getElementById('badge2').innerHTML = badge.emoji + ' ' + badge.title;
+
   const goalRow = document.getElementById('goalRow');
+  let goalMonthsText = null;
   if(goal && goal > 0){
     goalRow.style.display = 'flex';
     let goalMonths;
@@ -710,11 +899,18 @@ function calculateSavings(){
       document.getElementById('rGoalTime').textContent = '계산 불가';
     } else {
       const y = Math.floor(goalMonths/12), m = Math.round(goalMonths%12);
-      document.getElementById('rGoalTime').textContent = (y>0? y+'년 ':'') + m + '개월';
+      goalMonthsText = (y>0? y+'년 ':'') + m + '개월';
+      document.getElementById('rGoalTime').textContent = goalMonthsText;
     }
   } else {
     goalRow.style.display = 'none';
   }
+
+  document.getElementById('comment2').textContent =
+    '매달 ' + Math.round(monthly) + '만원씩 연 ' + rate.toFixed(1) + '%로 ' + years + '년 모으면 총 ' + Math.round(totalFV).toLocaleString('ko-KR') + '만원이 돼요. (원금 ' + Math.round(totalPrincipal).toLocaleString('ko-KR') + '만원 + 이자 ' + Math.round(totalInterest).toLocaleString('ko-KR') + '만원)' +
+    (goalMonthsText ? ' 목표 금액 ' + Math.round(goal).toLocaleString('ko-KR') + '만원까지는 약 ' + goalMonthsText + ' 걸려요.' : '');
+
+  lastResult2 = { monthly, rate, years, totalPrincipal, totalFV, totalInterest, returnPct, goal: (goal>0?goal:null), goalMonthsText };
 
   document.getElementById('stDate2').textContent = new Date().toLocaleDateString('ko-KR', {year:'numeric', month:'2-digit', day:'2-digit'});
 
@@ -754,7 +950,7 @@ function calculateSavings(){
     }
   });
 
-  statementEl2.scrollIntoView({ behavior:'smooth', block:'nearest' });
+  if(userTriggered) statementEl2.scrollIntoView({ behavior:'smooth', block:'nearest' });
 }
 
 /* ---------------- TAB 3: 지출 계산기 ---------------- */
@@ -797,10 +993,10 @@ document.getElementById('slipNo3').textContent = 'NO. ' + Math.floor(100000 + Ma
 
 let expChartInstance = null;
 
-function calculateExpense(){
-  const salary = parseFloat(document.getElementById('expSalary').value);
-  if(!salary || salary <= 0){
-    alert('월급(실수령액)을 정확히 입력해 주세요.');
+function calculateExpense(userTriggered){
+  const salary = parseFloat(document.getElementById('expSalary').value) || 0;
+  if(salary <= 0){
+    document.getElementById('statement3').classList.remove('show');
     return;
   }
 
@@ -832,6 +1028,17 @@ function calculateExpense(){
   const usedPct = grandTotal > 0 ? (grandTotal/salary*100) : 0;
   stampEl.innerHTML = '지출<br/>' + usedPct.toFixed(0) + '%';
 
+  const badge = getExpenseBadge(usedPct);
+  document.getElementById('badge3').innerHTML = badge.emoji + ' ' + badge.title;
+
+  const topCat = EXPENSE_CATEGORIES.slice().sort((a,b) => catTotals[b.key]-catTotals[a.key])[0];
+  document.getElementById('comment3').textContent =
+    grandTotal > 0
+      ? '이번 달 지출은 월급의 ' + usedPct.toFixed(0) + '%예요. 가장 큰 비중은 "' + topCat.label + '"(' + Math.round(catTotals[topCat.key]).toLocaleString('ko-KR') + '만원)이었어요.'
+      : '아직 지출 항목을 입력하지 않으셨어요. 항목별 금액을 채워보세요.';
+
+  lastResult3 = { salary, grandTotal, catTotals: Object.assign({}, catTotals), remaining, usedPct, topCatLabel: grandTotal>0?topCat.label:null };
+
   document.getElementById('stDate3').textContent = new Date().toLocaleDateString('ko-KR', {year:'numeric', month:'2-digit', day:'2-digit'});
 
   const statementEl3 = document.getElementById('statement3');
@@ -854,7 +1061,83 @@ function calculateExpense(){
     }
   });
 
-  statementEl3.scrollIntoView({ behavior:'smooth', block:'nearest' });
+  if(userTriggered) statementEl3.scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+
+/* ---------------- TAB 4: 종합 결론 ---------------- */
+function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
+
+function renderConclusion(){
+  document.getElementById('stDate4').textContent = new Date().toLocaleDateString('ko-KR', {year:'numeric', month:'2-digit', day:'2-digit'});
+
+  const scores = [];
+  const sections = [];
+
+  if(lastResult1){
+    const r = lastResult1;
+    const incomeScore = clamp(100 - r.topPct, 0, 100);
+    const savingsRatio = r.salary > 0 ? (r.savings / r.salary * 100) : 0;
+    const savingsScore = clamp(savingsRatio * 2.5, 0, 100);
+    scores.push((incomeScore + savingsScore) / 2);
+    sections.push(
+      '<div class="concl-section"><h3>① 월급 비교</h3><p>' +
+      r.bracketLabel + ' · ' + r.regionName + ' (' + r.householdSize + '인 가구) 기준, 월급 ' + Math.round(r.salary).toLocaleString('ko-KR') + '만원은 또래 중 상위 ' + r.topPct.toFixed(0) + '%예요. ' +
+      '생활비를 제한 저축 여력은 ' + (r.savings>=0?'+':'') + Math.round(r.savings).toLocaleString('ko-KR') + '만원이에요.' +
+      '</p></div>'
+    );
+  } else {
+    sections.push('<div class="concl-section"><h3>① 월급 비교</h3><p class="concl-empty">아직 계산하지 않으셨어요. <a onclick="switchTab(1)" style="color:var(--gold);cursor:pointer;">지금 확인하기 →</a></p></div>');
+  }
+
+  if(lastResult2){
+    const r = lastResult2;
+    const simScore = clamp(r.returnPct * 3, 0, 100);
+    scores.push(simScore);
+    sections.push(
+      '<div class="concl-section"><h3>② 저축 시뮬레이션</h3><p>' +
+      '매달 ' + Math.round(r.monthly).toLocaleString('ko-KR') + '만원씩 연 ' + r.rate.toFixed(1) + '%로 ' + r.years + '년 모으면 총 ' + Math.round(r.totalFV).toLocaleString('ko-KR') + '만원이 돼요.' +
+      (r.goalMonthsText ? ' 목표 ' + Math.round(r.goal).toLocaleString('ko-KR') + '만원까지는 약 ' + r.goalMonthsText + ' 걸려요.' : '') +
+      '</p></div>'
+    );
+  } else {
+    sections.push('<div class="concl-section"><h3>② 저축 시뮬레이션</h3><p class="concl-empty">아직 계산하지 않으셨어요. <a onclick="switchTab(2)" style="color:var(--gold);cursor:pointer;">지금 확인하기 →</a></p></div>');
+  }
+
+  if(lastResult3){
+    const r = lastResult3;
+    const expenseScore = clamp(100 - r.usedPct, 0, 100);
+    scores.push(expenseScore);
+    sections.push(
+      '<div class="concl-section"><h3>③ 지출 계산기</h3><p>' +
+      '이번 달 지출은 월급의 ' + r.usedPct.toFixed(0) + '%' + (r.topCatLabel ? ' (가장 큰 비중: ' + r.topCatLabel + ')' : '') + '예요. ' +
+      '월급 대비 남는 돈은 ' + (r.remaining>=0?'+':'') + Math.round(r.remaining).toLocaleString('ko-KR') + '만원이에요.' +
+      '</p></div>'
+    );
+  } else {
+    sections.push('<div class="concl-section"><h3>③ 지출 계산기</h3><p class="concl-empty">아직 계산하지 않으셨어요. <a onclick="switchTab(3)" style="color:var(--gold);cursor:pointer;">지금 확인하기 →</a></p></div>');
+  }
+
+  document.getElementById('conclBody').innerHTML = sections.join('');
+
+  if(scores.length === 0){
+    document.getElementById('conclEmoji').textContent = '🧭';
+    document.getElementById('conclTitle').textContent = '아직 데이터가 부족해요';
+    document.getElementById('conclScore').textContent = '-';
+    document.getElementById('conclScoreFill').style.width = '0%';
+    return;
+  }
+
+  const overall = scores.reduce((a,b)=>a+b,0) / scores.length;
+  let emoji, title;
+  if(overall >= 80){ emoji='🏆'; title='재무 우등생'; }
+  else if(overall >= 65){ emoji='👍'; title='안정형'; }
+  else if(overall >= 50){ emoji='🌱'; title='성장형'; }
+  else { emoji='⚠️'; title='점검 필요형'; }
+
+  document.getElementById('conclEmoji').textContent = emoji;
+  document.getElementById('conclTitle').textContent = title;
+  document.getElementById('conclScore').textContent = Math.round(overall) + ' / 100' + (scores.length<3 ? ' (일부 탭 기준)' : '');
+  document.getElementById('conclScoreFill').style.width = overall + '%';
 }
 </script>
 </body>
