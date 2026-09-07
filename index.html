@@ -302,6 +302,7 @@
   .concl-score-bar{ height:12px; border-radius:7px; background: rgba(27,42,74,0.08); overflow:hidden; margin-top:6px; }
   .concl-score-fill{ height:100%; background: linear-gradient(90deg, var(--gold-2), var(--gold)); transition: width .6s ease; }
 </style>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6936541131262338" crossorigin="anonymous"></script>
 </head>
 <body>
 <div class="app">
@@ -350,9 +351,9 @@
 
       <div class="field">
         <label>월 실수령 급여</label>
-        <input type="number" id="salary" placeholder="예: 320" data-unit="true" value="320" />
+        <input type="number" id="salary" placeholder="예: 320" data-unit="true" value="320" oninput="syncSalary(this.value, 'salary')" />
         <div class="unit">만원</div>
-        <div class="stepper"><span onclick="stepValue('salary',10,0)">▲</span><span onclick="stepValue('salary',-10,0)">▼</span></div>
+        <div class="stepper"><span onclick="stepValue('salary',10,0); syncSalary(document.getElementById('salary').value,'salary')">▲</span><span onclick="stepValue('salary',-10,0); syncSalary(document.getElementById('salary').value,'salary')">▼</span></div>
       </div>
 
       <button class="submit-btn" onclick="calculate(true)">명세서 발급하기</button>
@@ -512,9 +513,9 @@
 
       <div class="field">
         <label>월급 (실수령액)</label>
-        <input type="number" id="expSalary" placeholder="예: 320" data-unit="true" value="320" />
+        <input type="number" id="expSalary" placeholder="예: 320" data-unit="true" value="320" oninput="syncSalary(this.value, 'expSalary')" />
         <div class="unit">만원</div>
-        <div class="stepper"><span onclick="stepValue('expSalary',10,0)">▲</span><span onclick="stepValue('expSalary',-10,0)">▼</span></div>
+        <div class="stepper"><span onclick="stepValue('expSalary',10,0); syncSalary(document.getElementById('expSalary').value,'expSalary')">▲</span><span onclick="stepValue('expSalary',-10,0); syncSalary(document.getElementById('expSalary').value,'expSalary')">▼</span></div>
       </div>
 
       <div id="expenseCategories"></div>
@@ -664,6 +665,12 @@ const householdSelect = document.getElementById('household');
 document.getElementById('slipNo').textContent = 'NO. ' + Math.floor(100000 + Math.random()*899999);
 document.getElementById('slipNo2').textContent = 'NO. ' + Math.floor(100000 + Math.random()*899999);
 document.getElementById('yearBadge1').textContent = DATA_YEAR + '년 보정 추정치';
+
+// ① 월급 탭과 ③ 지출 탭의 "월급" 입력값을 서로 동기화 (결과 재계산은 하지 않음)
+function syncSalary(value, sourceId){
+  const other = sourceId === 'salary' ? 'expSalary' : 'salary';
+  document.getElementById(other).value = value;
+}
 
 function stepValue(id, delta, min, max, decimals){
   const el = document.getElementById(id);
