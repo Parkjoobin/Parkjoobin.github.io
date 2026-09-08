@@ -62,10 +62,10 @@
     border-radius: 10px; padding: 4px;
   }
   .tab-btn{
-    flex:1; text-align:center; padding: 10px 4px;
-    font-family:'Noto Serif KR', serif; font-weight:700; font-size: 12px;
+    flex:1; text-align:center; padding: 9px 2px;
+    font-family:'Noto Serif KR', serif; font-weight:700; font-size: 10.5px;
     color: rgba(241,236,224,0.55); background: transparent; border:none; border-radius: 7px;
-    cursor:pointer; transition: all .15s ease;
+    cursor:pointer; transition: all .15s ease; white-space:nowrap;
   }
   .tab-btn.active{ background: linear-gradient(180deg, var(--gold-2), var(--gold)); color:#241C05; }
   .tab-panel{ display:none; }
@@ -242,6 +242,7 @@
 
   /* SLIDER */
   .field input[type=range]{ padding:0; border:none; background:transparent; }
+  .field input[type=date]{ color-scheme: dark; }
   .slider-row{ display:flex; align-items:center; gap:10px; margin-top:8px; }
   .slider-row input[type=range]{
     flex:1; -webkit-appearance:none; appearance:none; height:4px; border-radius:3px;
@@ -320,6 +321,7 @@
     <button class="tab-btn" data-tab="2" onclick="switchTab(2)">② 저축</button>
     <button class="tab-btn" data-tab="3" onclick="switchTab(3)">③ 지출</button>
     <button class="tab-btn" data-tab="4" onclick="switchTab(4)">④ 결론</button>
+    <button class="tab-btn" data-tab="5" onclick="switchTab(5)">⑤ 퇴직연차</button>
   </div>
 
   <!-- TAB 1 -->
@@ -602,6 +604,87 @@
     </div>
   </div>
 
+  <!-- TAB 5 -->
+  <div class="tab-panel" id="panel5">
+    <div class="passbook">
+      <div class="passbook-header">
+        <div>
+          <div class="label">Labor Standards Act</div>
+          <div class="title">퇴직금 · 연차 계산기</div>
+        </div>
+        <div class="no" id="slipNo5">NO. 000000</div>
+      </div>
+
+      <div class="field">
+        <label>입사일</label>
+        <input type="date" id="hireDate" />
+      </div>
+
+      <div class="field">
+        <label>퇴사일 (재직 중이면 오늘 날짜)</label>
+        <input type="date" id="leaveDate" />
+      </div>
+
+      <div class="field">
+        <label>월급여 (세전, 통상임금 기준)</label>
+        <input type="number" id="monthlyWageLabor" placeholder="예: 320" data-unit="true" />
+        <div class="unit">만원</div>
+        <div class="stepper"><span onclick="stepValue('monthlyWageLabor',10,0)">▲</span><span onclick="stepValue('monthlyWageLabor',-10,0)">▼</span></div>
+      </div>
+
+      <div class="field">
+        <label>최근 3개월 상여금 등 추가 지급액 (선택)</label>
+        <input type="number" id="bonus3m" placeholder="0" data-unit="true" />
+        <div class="unit">만원</div>
+        <div class="stepper"><span onclick="stepValue('bonus3m',10,0)">▲</span><span onclick="stepValue('bonus3m',-10,0)">▼</span></div>
+      </div>
+
+      <div class="field">
+        <label>올해 사용한 연차일수</label>
+        <input type="number" id="usedLeaveDays" placeholder="0" />
+        <div class="stepper"><span onclick="stepValue('usedLeaveDays',1,0)">▲</span><span onclick="stepValue('usedLeaveDays',-1,0)">▼</span></div>
+      </div>
+
+      <button class="submit-btn" onclick="calculateLabor(true)">계산하기</button>
+    </div>
+
+    <div class="statement" id="statement5">
+      <div class="watermark-layer">
+        <span>둥둥섬의동동</span><span>둥둥섬의동동</span><span>둥둥섬의동동</span>
+        <span>둥둥섬의동동</span><span>둥둥섬의동동</span><span>둥둥섬의동동</span>
+        <span>둥둥섬의동동</span><span>둥둥섬의동동</span><span>둥둥섬의동동</span>
+      </div>
+      <div class="st-inner">
+      <div class="stamp" id="stampText5">근속<br/>-</div>
+      <div class="st-head"><div class="t">퇴직금 · 연차 명세서</div><div class="d" id="stDate5"></div></div>
+
+      <div class="st-row"><div class="k">재직 기간</div><div class="v" id="rServicePeriod">-</div></div>
+      <div class="st-divider"></div>
+
+      <div class="st-row"><div class="k">1일 평균임금</div><div class="v" id="rAvgDailyWage">-</div></div>
+      <div class="st-row"><div class="k">예상 퇴직금</div><div class="v" id="rSeverance">-</div></div>
+
+      <div class="st-divider"></div>
+
+      <div class="st-row"><div class="k">법정 총 연차일수</div><div class="v" id="rTotalLeave">-</div></div>
+      <div class="st-row"><div class="k">사용·미사용 연차</div><div class="v" id="rLeaveUsage">-</div></div>
+      <div class="st-row"><div class="k">예상 연차수당</div><div class="v" id="rLeavePay">-</div></div>
+
+      <div class="cta">
+        <div class="cta-text" id="ctaText5"><b>-</b>-</div>
+        <a href="#" class="cta-btn" id="ctaBtn5" target="_blank" rel="noopener">보러가기</a>
+      </div>
+      <div class="affiliate-disclosure">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</div>
+
+      <button class="share-btn" onclick="shareImage('statement5','my-severance-report')">📸 이미지로 저장·공유</button>
+
+      <div class="footnote">
+        ※ 근로기준법상 <b>법정 최소 기준</b> 계산식입니다. 실제 지급액은 회사 취업규칙, 상여금·수당 반영 방식에 따라 다를 수 있으니 참고용으로만 활용해 주세요. 1일 통상임금은 월급여÷30으로 간이 계산했습니다.
+      </div>
+      </div>
+    </div>
+  </div>
+
   <div class="source-note">
     참고: 통계청 임금·가계동향 관련 공표자료 흐름을 반영한 추정 지수<br/>
     입력하신 정보는 저장되지 않으며 화면에서만 계산됩니다.
@@ -730,6 +813,7 @@ function switchTab(n){
   document.getElementById('panel2').classList.toggle('active', n===2);
   document.getElementById('panel3').classList.toggle('active', n===3);
   document.getElementById('panel4').classList.toggle('active', n===4);
+  document.getElementById('panel5').classList.toggle('active', n===5);
   if(n===2 && lastSavings !== null){
     const field = document.getElementById('monthlySaving');
     field.value = Math.max(0, Math.min(300, Math.round(lastSavings)));
@@ -1146,6 +1230,77 @@ function calculateExpense(userTriggered){
 
 /* ---------------- TAB 4: 종합 결론 ---------------- */
 function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
+
+/* ---------------- TAB 5: 퇴직금 · 연차 계산기 ---------------- */
+document.getElementById('slipNo5').textContent = 'NO. ' + Math.floor(100000 + Math.random()*899999);
+(function(){
+  const today = new Date().toISOString().slice(0,10);
+  document.getElementById('leaveDate').value = today;
+})();
+
+function calculateLabor(userTriggered){
+  const hireStr = document.getElementById('hireDate').value;
+  const leaveStr = document.getElementById('leaveDate').value;
+  const monthlyWage = parseFloat(document.getElementById('monthlyWageLabor').value) || 0;
+  const bonus3m = parseFloat(document.getElementById('bonus3m').value) || 0;
+  const usedLeave = parseFloat(document.getElementById('usedLeaveDays').value) || 0;
+
+  if(!hireStr || !leaveStr || monthlyWage <= 0){
+    alert('입사일, 퇴사일(기준일), 월급여를 입력해 주세요.');
+    return;
+  }
+  const hireDate = new Date(hireStr + 'T00:00:00');
+  const leaveDate = new Date(leaveStr + 'T00:00:00');
+  const workDays = Math.round((leaveDate - hireDate) / 86400000);
+  if(workDays <= 0){
+    alert('퇴사일(기준일)은 입사일보다 뒤여야 해요.');
+    return;
+  }
+
+  // 퇴직금: 최근 3개월 평균임금 기준
+  const threeMonthsAgo = new Date(leaveDate);
+  threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
+  const daysInLast3Months = Math.max(1, Math.round((leaveDate - threeMonthsAgo) / 86400000));
+  const totalWage3m = monthlyWage * 3 + bonus3m;
+  const avgDailyWage = totalWage3m / daysInLast3Months;
+  const severance = avgDailyWage * 30 * (workDays / 365);
+
+  // 연차: 근로기준법 제60조 기준
+  const serviceYears = workDays / 365;
+  let totalLeave;
+  if(serviceYears < 1){
+    totalLeave = Math.min(11, Math.floor(workDays / 30));
+  } else {
+    const extra = Math.floor((serviceYears - 1) / 2);
+    totalLeave = Math.min(25, 15 + extra);
+  }
+  const unusedLeave = Math.max(0, totalLeave - usedLeave);
+  const dailyOrdinaryWage = monthlyWage / 30;
+  const leavePay = unusedLeave * dailyOrdinaryWage;
+
+  const years = Math.floor(workDays / 365);
+  const months = Math.floor((workDays % 365) / 30);
+  document.getElementById('rServicePeriod').textContent = years + '년 ' + months + '개월 (' + workDays.toLocaleString('ko-KR') + '일)';
+  document.getElementById('rAvgDailyWage').textContent = fmt(Math.round(avgDailyWage));
+  document.getElementById('rSeverance').textContent = fmt(Math.round(severance));
+  document.getElementById('rTotalLeave').textContent = totalLeave + '일';
+  document.getElementById('rLeaveUsage').textContent = '사용 ' + usedLeave + '일 · 미사용 ' + unusedLeave + '일';
+  document.getElementById('rLeavePay').textContent = fmt(Math.round(leavePay));
+
+  document.getElementById('stampText5').innerHTML = years + '년<br/>' + months + '개월';
+  document.getElementById('stDate5').textContent = new Date().toLocaleDateString('ko-KR', {year:'numeric', month:'2-digit', day:'2-digit'});
+
+  const ctaText5 = document.getElementById('ctaText5');
+  const ctaBtn5 = document.getElementById('ctaBtn5');
+  ctaText5.innerHTML = '<b>퇴직 후 계획, 책으로 준비해보세요</b>이직·재테크 책 추천';
+  ctaBtn5.textContent = '책 보러가기';
+  ctaBtn5.href = pickAffiliateLink('finance');
+
+  const statementEl5 = document.getElementById('statement5');
+  statementEl5.classList.remove('show'); void statementEl5.offsetWidth; statementEl5.classList.add('show');
+  if(userTriggered) statementEl5.scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+
 
 function renderConclusion(){
   document.getElementById('stDate4').textContent = new Date().toLocaleDateString('ko-KR', {year:'numeric', month:'2-digit', day:'2-digit'});
