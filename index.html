@@ -199,6 +199,7 @@
     font-size: 12px; font-weight:700; padding: 9px 14px; border-radius: 7px; white-space:nowrap;
   }
   .cta a.cta-btn.disabled{ opacity:0.45; pointer-events:none; cursor:default; }
+  .affiliate-disclosure{ font-size: 10px; color: var(--muted); text-align:center; margin: 4px 0 0; }
 
   .source-note{ text-align:center; color: rgba(241,236,224,0.35); font-size: 10.5px; margin-top: 20px; line-height:1.7; }
 
@@ -401,8 +402,10 @@
         <div class="cta-text" id="ctaText"><b>-</b>-</div>
         <a href="#" class="cta-btn" id="ctaBtn" target="_blank" rel="noopener">바로가기</a>
       </div>
+      <div class="affiliate-disclosure">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</div>
 
       <button class="share-btn" onclick="shareImage('statement','my-salary-report')">📸 이미지로 저장·공유</button>
+      <button class="share-btn" onclick="shareText('salary')">💬 문구로 공유하기</button>
       <a class="conclusion-link" onclick="switchTab(4)">📊 종합 결론 보러가기</a>
 
       <div class="footnote" id="footnote1">
@@ -486,11 +489,13 @@
       </div>
 
       <div class="cta">
-        <div class="cta-text"><b>정기적금/예금 비교 연결 예정</b>준비 중입니다</div>
-        <a href="javascript:void(0)" class="cta-btn disabled">준비 중</a>
+        <div class="cta-text" id="ctaText2"><b>저축은 기록할수록 잘 지켜져요</b>저축 다이어리로 관리해보세요</div>
+        <a href="#" class="cta-btn" id="ctaBtn2" target="_blank" rel="noopener">보러가기</a>
       </div>
+      <div class="affiliate-disclosure">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</div>
 
       <button class="share-btn" onclick="shareImage('statement2','my-savings-plan')">📸 이미지로 저장·공유</button>
+      <button class="share-btn" onclick="shareText('savings')">💬 문구로 공유하기</button>
       <a class="conclusion-link" onclick="switchTab(4)">📊 종합 결론 보러가기</a>
 
       <div class="footnote">
@@ -548,11 +553,13 @@
       </div>
 
       <div class="cta">
-        <div class="cta-text"><b>지출 항목 더 다듬고 싶다면</b>가계부 관리 팁 연결 예정 (준비 중)</div>
-        <a href="javascript:void(0)" class="cta-btn disabled">준비 중</a>
+        <div class="cta-text" id="ctaText3"><b>지출 항목 더 다듬고 싶다면</b>실물 가계부로 손으로 적어보세요</div>
+        <a href="#" class="cta-btn" id="ctaBtn3" target="_blank" rel="noopener">보러가기</a>
       </div>
+      <div class="affiliate-disclosure">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</div>
 
       <button class="share-btn" onclick="shareImage('statement3','my-expense-report')">📸 이미지로 저장·공유</button>
+      <button class="share-btn" onclick="shareText('expense')">💬 문구로 공유하기</button>
       <a class="conclusion-link" onclick="switchTab(4)">📊 종합 결론 보러가기</a>
 
       <div class="footnote">
@@ -586,6 +593,7 @@
       <div id="conclBody"></div>
 
       <button class="share-btn" onclick="shareImage('statement4','my-financial-report')">📸 이미지로 저장·공유</button>
+      <button class="share-btn" onclick="shareText('conclusion')">💬 문구로 공유하기</button>
 
       <div class="footnote">
         ※ 이 리포트는 ①②③ 탭에서 계산하신 값을 종합해 자동으로 만들어져요. 값을 바꾸면 여기도 함께 업데이트돼요.
@@ -701,6 +709,17 @@ function percentileOf(salary, mean){
   return Math.min(99, Math.max(1, pct));
 }
 
+// 쿠팡파트너스 링크 (카테고리별 여러 개 중 매번 무작위로 하나씩 노출)
+const AFFILIATE_LINKS = {
+  diary: ['https://link.coupang.com/a/gRICXVkmbs', 'https://link.coupang.com/a/gRIKRSNb08'],
+  budget: ['https://link.coupang.com/a/gRIFpS6vym', 'https://link.coupang.com/a/gRIHEW6BdQ', 'https://link.coupang.com/a/gRIJkeIpX2'],
+  finance: ['https://link.coupang.com/a/gRIMPkiwCG', 'https://link.coupang.com/a/gRINx2o6UK', 'https://link.coupang.com/a/gRIOiOyMto'],
+};
+function pickAffiliateLink(category){
+  const list = AFFILIATE_LINKS[category];
+  return list[Math.floor(Math.random() * list.length)];
+}
+
 let chartInstance = null;
 let lastSavings = null;
 let lastResult1 = null, lastResult2 = null, lastResult3 = null;
@@ -762,6 +781,44 @@ function downloadBlob(blob, filename){
   setTimeout(()=>URL.revokeObjectURL(url), 3000);
 }
 
+/* ---------------- 문구로 공유하기 (카톡/SNS 텍스트 공유) ---------------- */
+function shareText(kind){
+  const url = location.href.split('#')[0];
+  let text = '';
+
+  if(kind === 'salary'){
+    if(!lastResult1){ alert('먼저 ①탭에서 명세서를 발급해주세요.'); return; }
+    const r = lastResult1;
+    text = '나는 ' + r.bracketLabel + ' · ' + r.regionName + ' 기준 상위 ' + r.topPct.toFixed(0) + '%야! 너는 몇 %일까? 👉 ' + url;
+  } else if(kind === 'savings'){
+    if(!lastResult2){ alert('먼저 ②탭에서 저축 계획을 계산해주세요.'); return; }
+    const r = lastResult2;
+    text = '매달 ' + Math.round(r.monthly) + '만원씩 ' + r.years + '년 모으면 ' + Math.round(r.totalFV).toLocaleString('ko-KR') + '만원! 너도 계산해봐 👉 ' + url;
+  } else if(kind === 'expense'){
+    if(!lastResult3){ alert('먼저 ③탭에서 지출을 계산해주세요.'); return; }
+    const r = lastResult3;
+    text = '이번 달 지출 월급의 ' + r.usedPct.toFixed(0) + '%! 너는 얼마나 써? 👉 ' + url;
+  } else if(kind === 'conclusion'){
+    const scoreEl = document.getElementById('conclScore');
+    const titleEl = document.getElementById('conclTitle');
+    if(!scoreEl || scoreEl.textContent === '-'){ alert('먼저 ①②③탭을 계산한 뒤 ④결론 탭을 확인해주세요.'); return; }
+    text = '내 종합 재무 점수: ' + scoreEl.textContent + ' (' + titleEl.textContent + ') — 너도 확인해봐 👉 ' + url;
+  }
+
+  if(navigator.share){
+    navigator.share({ title:'내 월급 명세서', text, url }).catch(()=>{ copyToClipboard(text); });
+  } else {
+    copyToClipboard(text);
+  }
+}
+function copyToClipboard(text){
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(()=> alert('문구가 복사됐어요. 카톡에 붙여넣기 해보세요!'));
+  } else {
+    prompt('아래 문구를 복사해서 공유해보세요:', text);
+  }
+}
+
 function calculate(userTriggered){
   const age = parseInt(document.getElementById('age').value, 10);
   const salary = parseFloat(document.getElementById('salary').value);
@@ -806,8 +863,8 @@ function calculate(userTriggered){
 
   const badge = getIncomeBadge(topPct, savings);
   document.getElementById('badge1').innerHTML = badge.emoji + ' ' + badge.title;
-  document.getElementById('comment1').textContent =
-    bracket.label + ' · ' + region.name + ' 거주자 중 상위 ' + topPct.toFixed(0) + '%의 소득이에요. ' +
+  document.getElementById('comment1').innerHTML =
+    '<b>나는 ' + bracket.label + ' · ' + region.name + ' 기준 상위 ' + topPct.toFixed(0) + '%! 너는 몇 %야? 🔥</b><br/>' +
     '추정 생활비를 제하면 매달 ' + (savings>=0?'+':'') + Math.round(savings) + '만원의 여력이 ' + (savings>=0?'생겨요.':'부족해요.');
 
   document.getElementById('stDate').textContent = new Date().toLocaleDateString('ko-KR', {year:'numeric', month:'2-digit', day:'2-digit'}) + ' (' + BASE_YEAR + '년 통계 + 상승률 반영 ' + DATA_YEAR + '년 추정)';
@@ -816,15 +873,15 @@ function calculate(userTriggered){
   const ctaText = document.getElementById('ctaText');
   const ctaBtn = document.getElementById('ctaBtn');
   if(savings >= 0){
-    ctaText.innerHTML = '<b>저축 여력이 있으시네요</b>더 높은 금리의 예적금 상품 연결 예정 (준비 중)';
-    ctaBtn.textContent = '준비 중';
-    ctaBtn.href = 'javascript:void(0)';
-    ctaBtn.classList.add('disabled');
+    ctaText.innerHTML = '<b>저축 여력이 있으시네요</b>재테크 공부, 책 한 권으로 시작해보세요';
+    ctaBtn.textContent = '책 보러가기';
+    ctaBtn.href = pickAffiliateLink('finance');
+    ctaBtn.classList.remove('disabled');
   } else {
-    ctaText.innerHTML = '<b>지출 구조를 점검해볼 시점</b>가계부·재테크 팁 콘텐츠 연결 예정 (준비 중)';
-    ctaBtn.textContent = '준비 중';
-    ctaBtn.href = 'javascript:void(0)';
-    ctaBtn.classList.add('disabled');
+    ctaText.innerHTML = '<b>지출 구조를 점검해볼 시점</b>가계부부터 다시 써보는 건 어때요';
+    ctaBtn.textContent = '가계부 보러가기';
+    ctaBtn.href = pickAffiliateLink('budget');
+    ctaBtn.classList.remove('disabled');
   }
 
   const statementEl = document.getElementById('statement');
@@ -879,6 +936,8 @@ function calculateSavings(userTriggered){
     return;
   }
 
+  document.getElementById('ctaBtn2').href = pickAffiliateLink('diary');
+
   const months = Math.round(years * 12);
   const monthlyRate = (rate/100)/12;
 
@@ -924,8 +983,9 @@ function calculateSavings(userTriggered){
     goalRow.style.display = 'none';
   }
 
-  document.getElementById('comment2').textContent =
-    '매달 ' + Math.round(monthly) + '만원씩 연 ' + rate.toFixed(1) + '%로 ' + years + '년 모으면 총 ' + Math.round(totalFV).toLocaleString('ko-KR') + '만원이 돼요. (원금 ' + Math.round(totalPrincipal).toLocaleString('ko-KR') + '만원 + 이자 ' + Math.round(totalInterest).toLocaleString('ko-KR') + '만원)' +
+  document.getElementById('comment2').innerHTML =
+    '<b>매달 ' + Math.round(monthly) + '만원씩 ' + years + '년 모으면 ' + Math.round(totalFV).toLocaleString('ko-KR') + '만원! 너도 계산해볼래? 💰</b><br/>' +
+    '(원금 ' + Math.round(totalPrincipal).toLocaleString('ko-KR') + '만원 + 이자 ' + Math.round(totalInterest).toLocaleString('ko-KR') + '만원)' +
     (goalMonthsText ? ' 목표 금액 ' + Math.round(goal).toLocaleString('ko-KR') + '만원까지는 약 ' + goalMonthsText + ' 걸려요.' : '');
 
   lastResult2 = { monthly, rate, years, totalPrincipal, totalFV, totalInterest, returnPct, goal: (goal>0?goal:null), goalMonthsText };
@@ -1018,6 +1078,8 @@ function calculateExpense(userTriggered){
     return;
   }
 
+  document.getElementById('ctaBtn3').href = pickAffiliateLink('budget');
+
   const catTotals = {};
   let grandTotal = 0;
   EXPENSE_CATEGORIES.forEach(cat => {
@@ -1050,9 +1112,9 @@ function calculateExpense(userTriggered){
   document.getElementById('badge3').innerHTML = badge.emoji + ' ' + badge.title;
 
   const topCat = EXPENSE_CATEGORIES.slice().sort((a,b) => catTotals[b.key]-catTotals[a.key])[0];
-  document.getElementById('comment3').textContent =
+  document.getElementById('comment3').innerHTML =
     grandTotal > 0
-      ? '이번 달 지출은 월급의 ' + usedPct.toFixed(0) + '%예요. 가장 큰 비중은 "' + topCat.label + '"(' + Math.round(catTotals[topCat.key]).toLocaleString('ko-KR') + '만원)이었어요.'
+      ? '<b>이번 달 지출 월급의 ' + usedPct.toFixed(0) + '%! 너는 얼마나 써? 👀</b><br/>가장 큰 비중은 "' + topCat.label + '"(' + Math.round(catTotals[topCat.key]).toLocaleString('ko-KR') + '만원)이었어요.'
       : '아직 지출 항목을 입력하지 않으셨어요. 항목별 금액을 채워보세요.';
 
   lastResult3 = { salary, grandTotal, catTotals: Object.assign({}, catTotals), remaining, usedPct, topCatLabel: grandTotal>0?topCat.label:null };
