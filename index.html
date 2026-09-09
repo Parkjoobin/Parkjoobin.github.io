@@ -68,6 +68,12 @@
     cursor:pointer; transition: all .15s ease; white-space:nowrap;
   }
   .tab-btn.active{ background: linear-gradient(180deg, var(--gold-2), var(--gold)); color:#241C05; }
+
+  .tab-info{
+    background: rgba(241,236,224,0.06); border: 1px solid rgba(241,236,224,0.15);
+    border-radius: 8px; padding: 10px 13px; font-size: 12px; color: rgba(241,236,224,0.72);
+    line-height: 1.55; margin-bottom: 16px;
+  }
   .tab-panel{ display:none; }
   .tab-panel.active{ display:block; }
 
@@ -323,6 +329,8 @@
     <button class="tab-btn" data-tab="4" onclick="switchTab(4)">④ 결론</button>
     <button class="tab-btn" data-tab="5" onclick="switchTab(5)">⑤ 퇴직연차</button>
   </div>
+
+  <div class="tab-info" id="tabInfo">📍 나이·지역·가구원 수·월급을 입력하면 또래 대비 내 위치와 예상 저축 여력을 알려드려요.</div>
 
   <!-- TAB 1 -->
   <div class="tab-panel active" id="panel1">
@@ -807,6 +815,14 @@ let chartInstance = null;
 let lastSavings = null;
 let lastResult1 = null, lastResult2 = null, lastResult3 = null;
 
+const TAB_INFO = {
+  1: '📍 나이·지역·가구원 수·월급을 입력하면 또래 대비 내 위치와 예상 저축 여력을 알려드려요.',
+  2: '📍 월 저축액·수익률·기간을 입력하면 복리로 얼마나 모이는지 계산해요. 목표 금액을 넣으면 도달 기간도 알려드려요.',
+  3: '📍 월급과 카테고리별 지출(고정지출·생활비·저축·여가·예비비)을 입력하면 지출 비중과 남는 돈을 보여드려요.',
+  4: '📍 ①②③ 탭에서 계산한 값을 모아 종합 재무 점수를 보여드려요. 먼저 다른 탭부터 계산해보세요.',
+  5: '📍 입사일·퇴사일(재직 중이면 오늘)·월급여를 입력하면 예상 퇴직금과 연차수당을 계산해요. 근로기준법 기준 법정 최소값이에요.',
+};
+
 function switchTab(n){
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab == n));
   document.getElementById('panel1').classList.toggle('active', n===1);
@@ -814,6 +830,7 @@ function switchTab(n){
   document.getElementById('panel3').classList.toggle('active', n===3);
   document.getElementById('panel4').classList.toggle('active', n===4);
   document.getElementById('panel5').classList.toggle('active', n===5);
+  document.getElementById('tabInfo').textContent = TAB_INFO[n] || '';
   if(n===2 && lastSavings !== null){
     const field = document.getElementById('monthlySaving');
     field.value = Math.max(0, Math.min(300, Math.round(lastSavings)));
